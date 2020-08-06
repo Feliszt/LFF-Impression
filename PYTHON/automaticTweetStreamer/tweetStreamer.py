@@ -8,6 +8,18 @@ import random
 import threading
 
 def analyze_tweet(status, verbose) :
+
+    # get time of creation
+    createdAt = status.created_at
+    createdAtTimestamp = datetime.datetime.timestamp(createdAt)
+
+    # get current time
+    now = datetime.datetime.now()
+    nowTimestamp = datetime.datetime.timestamp(now) - 7200
+
+    # get diff
+    diffTime = int(nowTimestamp - createdAtTimestamp)
+
     # init json
     jsonData = {}
 
@@ -16,7 +28,7 @@ def analyze_tweet(status, verbose) :
         status.retweeted_status
         if(verbose) :
             print("RETWEET")
-        return -1
+        return -1, diffTime
     except AttributeError:  # Not a Retweet
         if(verbose) :
             print("NOT A RETWEET")
@@ -25,7 +37,7 @@ def analyze_tweet(status, verbose) :
     if(status.in_reply_to_status_id is not None) :
         if(verbose) :
             print("REPLY")
-        return -2
+        return -2, diffTime
     if(verbose) :
         print ("NOT A REPLY")
 
@@ -33,13 +45,13 @@ def analyze_tweet(status, verbose) :
     if(status.is_quote_status) :
         if(verbose) :
             print("QUOTE")
-        return -3
+        return -3, diffTime
     if(verbose) :
         print ("NOT A QUOTE")
 
     # create json
     #post stuff
-    jsonData['created_at']          = str(status.created_at)
+    jsonData['created_at']          = str(createdAt)
     jsonData['id']                  = status.id
     jsonData['id_str']              = status.id_str
     jsonData['text']                = status.text
@@ -88,24 +100,40 @@ def analyze_tweet(status, verbose) :
 
     # check if has url
     if(len(status.entities['urls']) > 0) :
-        return -4
+        return -4, diffTime
 
     # check if has mention
     if(len(status.entities['user_mentions']) > 0) :
-        return -5
+        return -5, diffTime
 
     # check if has media but no photo
     if(has_media and not jsonData['has_image']) :
-        return -6
+        return -6, diffTime
 
-    return jsonData
+    return jsonData, diffTime
 
 #override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
 
     def __init__(self):
         super(MyStreamListener, self).__init__()
-        self.datetime = datetime.datetime.now().strftime("%d-%m-%Y")
+
+        # get date
+        dateTime = datetime.datetime.now().strftime("%d-%m-%Y")
+
+        # get hour
+        h = int(datetime.datetime.now().strftime("%H"))
+        hMapped = 0
+        if(h >= 0 and h < 6):
+            hMapped = 1
+        if(h >= 6 and h < 12):
+            hMapped = 2
+        if(h >= 12 and h < 18):
+            hMapped = 3
+        if(h >= 18 and h < 24):
+            hMapped = 4
+
+        self.jsonName = dateTime + "_" + str(hMapped)
         self.verbose = False
         self.numTweets = 0
 
@@ -122,14 +150,14 @@ class MyStreamListener(tweepy.StreamListener):
         #    json.dump(status._json, outfile)
 
         # analyze tweet
-        res = analyze_tweet(_status, False)
+        res, diffTime = analyze_tweet(_status, False)
 
         # save to file
         # save to file
         if(isinstance(res, dict)) :
             self.numTweets = self.numTweets + 1
-            print("[TWEETSTREAMER]\tSaving tweet [" + str(self.numTweets) + "]\t" + str(threading.active_count()) + " threads.")
-            with open('json/' + self.datetime + '.json', 'a') as outfile:
+            print("[TWEETSTREAMER]\tSaving tweet [{}]\tthreads : {}\tDiffTime = {}".format(self.numTweets, threading.active_count(), diffTime))
+            with open('json/' + self.jsonName + '.json', 'a') as outfile:
                 json.dump(res, outfile)
                 outfile.write('\n')
         else :
@@ -158,4 +186,5 @@ myStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener, tweet_mode= 'extended')
 # launch stream
 
+#myStream.filter(languages=["fr"], track=["non"])
 myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"])
