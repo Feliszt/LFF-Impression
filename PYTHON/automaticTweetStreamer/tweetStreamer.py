@@ -5,6 +5,7 @@ import time
 import datetime
 import sys
 import random
+import threading
 
 def analyze_tweet(status, verbose) :
     # init json
@@ -104,24 +105,30 @@ class MyStreamListener(tweepy.StreamListener):
 
     def __init__(self):
         super(MyStreamListener, self).__init__()
-        self.datetime = datetime.datetime.now().strftime("%d-%m-%Y_%Hh%M")
+        self.datetime = datetime.datetime.now().strftime("%d-%m-%Y")
         self.verbose = False
         self.numTweets = 0
 
     # called when a tweet is received
     def on_status(self, status):
+        # perform classification
+        if(threading.active_count()) <= 5:
+            t = threading.Thread(target=self.processTweet, args=(status,))
+            t.start()
+
+    def processTweet(self, _status) :
         #print(status.text)
         #with open('tweet.json', 'w') as outfile:
         #    json.dump(status._json, outfile)
 
         # analyze tweet
-        res = analyze_tweet(status, False)
+        res = analyze_tweet(_status, False)
 
         # save to file
         # save to file
         if(isinstance(res, dict)) :
             self.numTweets = self.numTweets + 1
-            print("[TWEETSTREAMER]\tSaving tweet [" + str(self.numTweets) + "].")
+            print("[TWEETSTREAMER]\tSaving tweet [" + str(self.numTweets) + "]\t" + str(threading.active_count()) + " threads.")
             with open('json/' + self.datetime + '.json', 'a') as outfile:
                 json.dump(res, outfile)
                 outfile.write('\n')

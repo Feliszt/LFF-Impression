@@ -13,19 +13,38 @@ import sys
 procName    = sys.argv[1]
 procLength  = int(sys.argv[2])
 procWait    = int(sys.argv[3])
+timeType    = sys.argv[4]
+
+# handle time types
+timeMult = 0
+timeTypeString = None
+if timeType == "-ss" :
+    timeMult = 1
+    timeTypeString = "seconds"
+if timeType == "-mm" :
+    timeMult = 60
+    timeTypeString = "minutes"
+if timeType == "-hh" :
+    timeMult = 3600
+    timeTypeString = "hours"
+
+# exit if error
+if timeMult == 0 :
+    print("Incorrect argument format.")
+    exit()
 
 while True :
 
     # start process
-    print("[STREAMPLANNER]\tStart process for " + str(procLength) + " minutes.")
+    print("[STREAMPLANNER]\tStart process for " + str(procLength) + " " + timeTypeString + ".")
     process = subprocess.Popen(['python', procName + '.py'])
 
     # run process for specified time
-    time.sleep(procLength * 60)
+    time.sleep(procLength * timeMult)
 
     # kill process
-    print("[STREAMPLANNER]\tKill process and wait " + str(procWait) + " minutes.\n")
+    print("[STREAMPLANNER]\tKill process and wait " + str(procWait) + " " + timeTypeString + ".\n")
     process.kill()
 
     # wait until next start
-    time.sleep(procWait * 60)
+    time.sleep(procWait * timeMult)

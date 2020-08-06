@@ -98,12 +98,22 @@ def analyze_tweet(status, verbose) :
 
 #override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
+    # new init
+    def __init__(self):
+        super(MyStreamListener, self).__init__()
+        self.numTweets = 0
+
     # called when a tweet is received
     def on_status(self, status):
         #print(status.text)
         #with open('tweet.json', 'w') as outfile:
         #    json.dump(status._json, outfile)
 
+        self.numTweets = self.numTweets + 1
+        print("TWEET [" + str(self.numTweets) + "]")
+        time.sleep(2)
+
+        comment = """
         # analyze tweet
         res = analyze_tweet(status, False)
 
@@ -111,11 +121,9 @@ class MyStreamListener(tweepy.StreamListener):
         # save to file
         if(isinstance(res, dict)) :
             print("Saving tweet.")
-            comment = """
             with open('tweetStreamerDump.json', 'a') as outfile:
                 json.dump(res, outfile)
                 outfile.write('\n')
-            """
         else :
             if res == -1 :
                 print("Tweet is a retweet... not saving.")
@@ -129,6 +137,7 @@ class MyStreamListener(tweepy.StreamListener):
                 print("Tweet has a mention... not saving.")
             if res == -6 :
                 print("Tweet has a media but not photo... not saving.")
+        """
 
 # authentification and creation of api object
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
@@ -140,5 +149,5 @@ myStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener, tweet_mode= 'extended')
 
 # launch stream
-myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"], is_async=True)
+myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"])
 print("Start stream.")

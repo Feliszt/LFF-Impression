@@ -1,5 +1,8 @@
 # project specific
 *.json
+PYTHON/scripts/keys.py
+PYTHON/tweetStreamer/keys.py
+PYTHON/automaticTweetStreamer/keys.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
