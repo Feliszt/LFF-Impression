@@ -11,7 +11,7 @@ onlyfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
 datePrev = ""
 for f in onlyfiles :
     date = f.split('_')[0]
-    with open(folder + date + '.json', 'a') as outfile:
+    with open(folder + date + '_full.json', 'a') as outfile:
         with open(folder + f, 'r') as infile :
             lines = infile.readlines()
             outfile.writelines(lines)

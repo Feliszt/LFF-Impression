@@ -133,7 +133,8 @@ class MyStreamListener(tweepy.StreamListener):
         if(h >= 18 and h < 24):
             hMapped = 4
 
-        self.jsonName = dateTime + "_" + str(hMapped)
+        #self.jsonName = dateTime + "_" + str(hMapped)
+        self.jsonName = dateTime
         self.verbose = False
         self.numTweets = 0
 

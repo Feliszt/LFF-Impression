@@ -6,7 +6,7 @@ from os.path import isfile, join
 import json
 
 # specify folder
-folder = "D:/PERSO/_CREA/rar/_DEV/PYTHON/automaticTweetStreamer/json/"
+folder = "D:/PERSO/_CREA/rar/_DEV/PYTHON/automaticTweetStreamer/json/toclean/"
 
 # get files
 onlyfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
