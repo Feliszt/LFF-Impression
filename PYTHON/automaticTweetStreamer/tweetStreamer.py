@@ -154,11 +154,10 @@ class MyStreamListener(tweepy.StreamListener):
         res, diffTime = analyze_tweet(_status, False)
 
         # save to file
-        # save to file
         if(isinstance(res, dict)) :
             self.numTweets = self.numTweets + 1
             print("[TWEETSTREAMER]\tSaving tweet [{}]\tthreads : {}\tDiffTime = {}".format(self.numTweets, threading.active_count(), diffTime))
-            with open('json/' + self.jsonName + '.json', 'a') as outfile:
+            with open(folderToSave + self.jsonName + '.json', 'a') as outfile:
                 json.dump(res, outfile)
                 outfile.write('\n')
         else :
@@ -176,6 +175,8 @@ class MyStreamListener(tweepy.StreamListener):
                 if res == -6 :
                     print("[TWEETSTREAMER]\tTweet has a media but not photo... not saving.")
 
+# folder to save in
+folderToSave = "../_TWEETS_AND_DATA/fromStreamer/toclean/"
 
 # authentification and creation of api object
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
