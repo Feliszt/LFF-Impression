@@ -105,7 +105,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # get extended tweet
-tweet_status = api.get_status(1288453070893076482, tweet_mode="extended")
+tweet_status = api.get_status(1291509902503018503, tweet_mode="extended")
 
 # analyze tweet
 res = analyze_tweet(tweet_status, False)

@@ -6,7 +6,7 @@ from os.path import isfile, join
 import json
 
 # specify folder
-folder = "D:/PERSO/_CREA/rar/_DEV/PYTHON/automaticTweetStreamer/json/toclean/"
+folder = "D:/PERSO/_CREA/rar/_DEV/PYTHON/tweetChecker/json/"
 
 # get files
 onlyfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
@@ -43,7 +43,7 @@ for file in onlyfiles :
     print(str(numtweet) + " tweets.")
 
 
-    with open(folder + fileName + '_clean.json', "w") as f:
+    with open(folder + 'clean/' + fileName + '.json', "w") as f:
         tweets = {}
         tweets["tweets"] = tweet_list
         json.dump(tweets, f)
