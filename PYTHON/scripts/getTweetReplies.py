@@ -2,7 +2,6 @@ import tweepy
 from keys import *
 import json
 
-
 # set username and tweet id
 user_name = "@OrxraaRenz_"
 tweet_id = 1291517343844245504

@@ -4,6 +4,16 @@ PYTHON/scripts/keys.py
 PYTHON/tweetStreamer/keys.py
 PYTHON/automaticTweetStreamer/keys.py
 
+*.jpg
+*.db*
+*.opendb
+*.ipch
+*.make
+*.vcx*
+*.sln
+*.rc
+*.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -142,3 +152,4 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+PYTHON/tweetChecker/keys.py

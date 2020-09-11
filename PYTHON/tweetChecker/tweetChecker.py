@@ -1,3 +1,9 @@
+#
+#   -- This script goes through all the tweets that have been saved
+#   -- and check how many likes and favorites it received.
+#   -- Saves the result if the tweet hasn't been liked nor favorited.
+#
+
 import tweepy
 from os import listdir
 from os.path import isfile, join
@@ -36,10 +42,8 @@ auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-# folder to process
+# set folders
 folderToProcess = "../_TWEETS_AND_DATA/fromStreamer/"
-
-# folder to save in
 folderToSave = "../_TWEETS_AND_DATA/fromChecker/toclean/"
 
 # exclude list
