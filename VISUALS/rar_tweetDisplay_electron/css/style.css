@@ -1,0 +1,42 @@
+h1 {
+  font-size: 32px;
+  font-family: Arial;
+  text-align: center;
+}
+
+#tweetList ul {
+  list-style: none;
+}
+
+#tweet-instance {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.tweet-link {
+  text-decoration: none;
+  color: black;
+}
+
+#tweet-text {
+  font-size: 22px;
+  font-family: Arial;
+  padding-bottom: 5px;
+  white-space: pre-line;
+}
+
+#tweet-date {
+  font-size: 15px;
+  font-family: Arial;
+}
+
+#tweet-text {
+
+}
+
+img.emoji {
+   height: 1em;
+   width: 1em;
+   margin: 0 .05em 0 .1em;
+   vertical-align: -0.1em;
+}

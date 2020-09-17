@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -8,17 +9,23 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-
 		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void mouseEntered(int x, int y);
-		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
-		
+
+		// data
+		ofJson				jsonData;
+		std::u32string		currTweet_u32;
+		string				currTweet_string;
+		int					currTweetInd;
+		int					numTweets;
+
+		// text
+		ofTrueTypeFont	font;
+
+		// gui
+		ofxPanel		gui;
+
+		// utils
+		bool			showDebug = true;
+		ofVec2f			mouse, screen, center;
+		int				state = 1;
 };

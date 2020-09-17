@@ -4,6 +4,18 @@ PYTHON/scripts/keys.py
 PYTHON/tweetStreamer/keys.py
 PYTHON/automaticTweetStreamer/keys.py
 
+#directories
+VISUALS/rar_tweetDisplay_electron/bower_components
+VISUALS/rar_tweetDisplay_electron/node_modules
+VISUALS/rar_tweetDisplay_electron/dist
+VISUALS/rar_tweetDisplay/bin
+VISUALS/rar_tweetDisplay/obj
+
+#files
+*.tgz
+*.log
+*.suo
+
 *.jpg
 *.db*
 *.opendb

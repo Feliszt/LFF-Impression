@@ -1,0 +1,39 @@
+<style>
+    body{ background-color: ivory; }
+    canvas{border:1px solid red;}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(function(){
+
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+
+    ctx.fillStyle="gold";
+    ctx.strokeStyle="blue";
+    ctx.lineWidth=5;
+    ctx.rect(50,50,100,100);
+    ctx.fill();
+    ctx.stroke();
+
+    function print_voucher(){
+        var win=window.open();
+        win.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
+        win.print();
+        win.location.reload();
+    }
+
+    $("#printVoucher").click(function(){ print_voucher(); });
+
+
+}); // end $(function(){});
+</script>
+
+</head>
+
+<body>
+    <canvas id="canvas" width=300 height=300></canvas><br>
+    <button id="printVoucher">Print</button>
+</body>
+</html>

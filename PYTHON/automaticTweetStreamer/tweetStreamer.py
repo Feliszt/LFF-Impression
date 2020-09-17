@@ -11,11 +11,12 @@ def analyze_tweet(status, verbose) :
 
     # get time of creation
     createdAt = status.created_at
-    createdAtTimestamp = datetime.datetime.timestamp(createdAt)
+    createdAtTimestamp = datetime.datetime.timestamp(createdAt) + 7200  # correct for timezone
+    createdAt = datetime.fromtimestamp(createdAtTimestamp)
 
     # get current time
     now = datetime.datetime.now()
-    nowTimestamp = datetime.datetime.timestamp(now) - 7200
+    nowTimestamp = datetime.datetime.timestamp(now)
 
     # get diff
     diffTime = int(nowTimestamp - createdAtTimestamp)

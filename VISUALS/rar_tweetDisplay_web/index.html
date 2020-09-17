@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tweet display</title>
+    <meta charset="utf-8">
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+  	<link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div id="canvas" width=636 height=900>
+    <p id='tweet_text'>Heyheyhey</p>
+    </div>
+    <script>
+      var tweet = document.getElementById("tweet_text");
+      tweet.textContent = "&amp; je dois en poser une demain pur\u00e9e";
+      //document.body.appendChild(tweet);
+      twemoji.parse(document.body);
+    </script>
+  </body>
+</html>
