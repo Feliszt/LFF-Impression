@@ -8,13 +8,19 @@ PYTHON/automaticTweetStreamer/keys.py
 VISUALS/rar_tweetDisplay_electron/bower_components
 VISUALS/rar_tweetDisplay_electron/node_modules
 VISUALS/rar_tweetDisplay_electron/dist
+#
 VISUALS/rar_tweetDisplay/bin
 VISUALS/rar_tweetDisplay/obj
+#
+VISUALS/rar_tweetPrint_electron/bower_components
+VISUALS/rar_tweetPrint_electron/node_modules
+VISUALS/rar_tweetPrint_electron/dist
 
 #files
 *.tgz
 *.log
 *.suo
+*.pdf
 
 *.jpg
 *.db*

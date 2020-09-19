@@ -2,6 +2,11 @@
 const fs = require('fs');
 const path = require('path');
 
+function saveFunc(id) {
+  console.log(id);
+  document.getElementById(id).style.backgroundColor = "rgba(62, 140, 38, 0.5)";
+}
+
 function makeUL(array) {
     // Create the list element:
     var tweetsList = document.createElement('ul');
@@ -9,7 +14,8 @@ function makeUL(array) {
     for (var i = 0; i < array.length; i++) {
         // Create the list item:
         var tweetInstance = document.createElement('li');
-        tweetInstance.setAttribute("id", "tweet-instance");
+        tweetInstance.setAttribute("class", "tweet-instance");
+        tweetInstance.setAttribute("id", array[i]["id_str"]);
 
         // set link
         var tweetLink = document.createElement('a');
@@ -19,15 +25,21 @@ function makeUL(array) {
 
         // set text
         var tweetText = document.createElement('div');
-        tweetText.setAttribute("id", "tweet-text");
+        tweetText.setAttribute("class", "tweet-text");
         tweetText.appendChild(document.createTextNode(array[i]["text"]));
         tweetLink.appendChild(tweetText);
 
         // set date
         var tweetDate = document.createElement('div');
-        tweetDate.setAttribute("id", "tweet-date");
+        tweetDate.setAttribute("class", "tweet-date");
         tweetDate.appendChild(document.createTextNode(array[i]["created_at"]));
         tweetLink.appendChild(tweetDate);
+
+        // set button
+        var tweetButton = document.createElement('BUTTON');
+        tweetButton.innerHTML = "save";
+        tweetButton.setAttribute("onclick", "saveFunc('" + array[i]["id_str"] + "');");
+        tweetInstance.appendChild(tweetButton);
 
         // Add it to the list:
         tweetsList.appendChild(tweetInstance);
@@ -38,12 +50,16 @@ function makeUL(array) {
 }
 
 // load json
-let rawJSON = fs.readFileSync(path.resolve("assets", '10-08-2020_checked.json'));
+let rawJSON = fs.readFileSync('./assets/10-08-2020_checked.json');
 let tweetDATA = JSON.parse(rawJSON);
 
+//console.log(tweetDATA);
 
 // Add the contents of options[0] to #foo:
-document.getElementById('tweetList').appendChild(makeUL(tweetDATA["tweets"]));
+tweetList = makeUL(tweetDATA["tweets"]);
+document.getElementById('tweetList').appendChild(tweetList);
+
+
 //console.log(tweetDATA["tweets"][0]);
 
 // parse emojis
