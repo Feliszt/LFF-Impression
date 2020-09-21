@@ -12,12 +12,14 @@ import json
 import time
 import datetime
 
+# function that process a tweet to check if it follows the rules
+# for .rar installation
 def processTweet(_tweet) :
     # get extended tweet
     try :
-        tweet_status = api.get_status(_tweet["id"], tweet_mode="extended")
+        tweet_status = _api.get_status(_id, tweet_mode="extended")
     except tweepy.TweepError as e:
-        return -1
+        return -1, None
 
     # get today's date
     dateToday = datetime.datetime.now().strftime("%d/%m/%Y")
@@ -28,14 +30,12 @@ def processTweet(_tweet) :
     _tweet['favorite_count'] = tweet_status.favorite_count
 
     if(_tweet['retweet_count'] > 0 or _tweet['favorite_count'] > 0) :
-        return -2
+        return -2, None
 
-    # write to file
-    with open(folderToSave + fileToPrint + '_checked.json', 'a') as outfile:
-        json.dump(_tweet, outfile)
-        outfile.write('\n')
+    if(_tweet["possibly_sensitive"] == True) :
+        return -3, None
 
-    return 1
+    return 1, _tweet
 
 # authentification and creation of api object
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
@@ -76,11 +76,14 @@ for file in onlyfiles :
         # loop through all tweets
         tweetNum = 0
         for tweet in data :
+            # we start by waiting to not overflow the API
+            time.sleep(1.01)
+
             # incr
             tweetNum = tweetNum + 1
 
             # process tweet
-            res = processTweet(tweet)
+            res, tweet_checked = processTweet(tweet)
 
             # set success state
             successState = ""
@@ -88,10 +91,15 @@ for file in onlyfiles :
                 successState = "Can't access tweet."
             if(res == -2) :
                 successState = "Tweet has like or favorite."
+            if(res == -3) :
+                successState = "Tweet is offensive."
             if(res == 1) :
+                # write to file
+                with open(folderToSave + fileToPrint + '_checked.json', 'a') as outfile:
+                    json.dump(tweet_checked, outfile)
+                    outfile.write('\n')
+                #
                 successState = "Save completed."
 
             # print info
             print("{} / {} of {}\t[{}] => {}".format(tweetNum, tweetTotal, fileToPrint, tweet["id"], successState))
-
-            time.sleep(1.01)

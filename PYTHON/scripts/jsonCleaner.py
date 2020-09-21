@@ -7,7 +7,7 @@ from os.path import isfile, join
 import json
 
 # specify folder
-folder = "../_TWEETS_AND_DATA/fromChecker/toclean/"
+folder = "../_TWEETS_AND_DATA/fromStreamer/toclean/"
 folderPrevious = '/'.join(folder.split('/')[:-2]) + '/'
 
 # get files
