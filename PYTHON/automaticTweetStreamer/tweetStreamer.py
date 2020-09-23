@@ -177,7 +177,7 @@ class MyStreamListener(tweepy.StreamListener):
                     print("[TWEETSTREAMER]\tTweet has a media but not photo... not saving.")
 
 # folder to save in
-folderToSave = "../_TWEETS_AND_DATA/fromStreamer/toclean/"
+folderToSave = "../../DATA/fromStreamer/toclean/"
 
 # authentification and creation of api object
 auth = tweepy.OAuthHandler(api_key, api_secret_key)

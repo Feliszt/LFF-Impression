@@ -171,3 +171,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 PYTHON/tweetChecker/keys.py
+VISUALS/rar_tweetDisplay/.vs/rar_tweetDisplay/v15/.suo

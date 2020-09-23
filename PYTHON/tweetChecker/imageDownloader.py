@@ -10,8 +10,8 @@ import requests
 import time
 
 # set folders
-folderToProcess = "../_TWEETS_AND_DATA/fromChecker/"
-folderToSave = "../_TWEETS_AND_DATA/_images/"
+folderToProcess = "../../DATA/fromChecker/"
+folderToSave = "../../DATA/images/"
 
 # get files
 onlyfiles = [f for f in listdir(folderToProcess) if isfile(join(folderToProcess, f))]

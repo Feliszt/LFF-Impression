@@ -10,7 +10,7 @@ import json
 wordsList = ['bite']
 
 # specify folder
-folder = "../_TWEETS_AND_DATA/fromChecker/"
+folder = "../../DATA/fromChecker/"
 
 # get files
 onlyfiles = [f for f in listdir(folder) if isfile(join(folder, f))]

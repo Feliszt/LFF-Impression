@@ -43,8 +43,8 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # set folders
-folderToProcess = "../_TWEETS_AND_DATA/fromStreamer/"
-folderToSave = "../_TWEETS_AND_DATA/fromChecker/toclean/"
+folderToProcess = "../../DATA/fromStreamer/"
+folderToSave = "../../DATA/fromChecker/toclean/"
 
 # exclude list
 excludeList = ["07-08-2020"]
