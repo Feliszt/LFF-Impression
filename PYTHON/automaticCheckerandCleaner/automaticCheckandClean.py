@@ -3,8 +3,8 @@ import subprocess
 import time
 
 # fetch sys arguments
-procWait    = int(sys.argv[1])
-timeType    = sys.argv[2]
+procWait    = int(sys.argv[2])
+timeType    = sys.argv[3]
 
 # handle time types
 timeMult = 0
