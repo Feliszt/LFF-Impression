@@ -21,6 +21,7 @@ VISUALS/rar_tweetPrint_electron/dist
 *.log
 *.suo
 *.pdf
+*.txt
 
 *.jpg
 *.db*

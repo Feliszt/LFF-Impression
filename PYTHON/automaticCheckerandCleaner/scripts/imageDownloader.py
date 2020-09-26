@@ -3,18 +3,17 @@
 #   -- download them
 #
 
-from os import listdir
-from os.path import isfile, join
+import os
 import json
 import requests
 import time
 
 # set folders
-folderToProcess = "../../DATA/fromChecker/"
-folderToSave = "../../DATA/images/"
+checkerFolder = "../../DATA/fromChecker/"
+imageFolder = "../../DATA/images/"
 
 # get files
-onlyfiles = [f for f in listdir(folderToProcess) if isfile(join(folderToProcess, f))]
+onlyfiles = [f for f in os.listdir(checkerFolder) if os.path.isfile(os.path.join(checkerFolder, f))]
 
 # loop through files
 numImageTotal = 0
@@ -23,9 +22,10 @@ for file in onlyfiles :
 
     # get file name
     fileName = file.split('.')[0]
+    fileNameJustDate = fileName[:-8]
 
     # load file
-    with open(folderToProcess + file, "r", encoding="utf8") as dataFile:
+    with open(checkerFolder + file, "r", encoding="utf8") as dataFile:
         # load json that is in file
         tweets = json.load(dataFile)["tweets"]
         tweetTotal = len(tweets)
@@ -37,6 +37,10 @@ for file in onlyfiles :
             # incr
             tweetNum = tweetNum + 1
 
+            # print info
+            baseDebug = "{} / {} of {}".format(tweetNum, tweetTotal, fileName)
+            print("{}\t[{}]".format(baseDebug, tweet["id"]))
+
             # image state
             imageState = ""
             if(tweet["has_image"]) :
@@ -44,35 +48,40 @@ for file in onlyfiles :
             else :
                 imageState = "does not have image."
 
-            # if tweet has image, we download it
+            # we check for images, and download them
             if(tweet["has_image"]) :
                 # get number of images for this tweet
                 numImage = len(tweet["images"])
                 numImageTotal = numImageTotal + numImage
                 idImage = 1
 
+                # show debug
+                print("{}\tTweet has {} images.".format(baseDebug, numImage))
+
                 # loop through all images
                 for im in tweet["images"] :
-                    print("[{}]\timage {} / {}\t{}".format(tweet["id"], idImage, numImage, im["link"]))
+                    baseDebugImage = "image {} / {}".format(idImage, numImage);
+                    print("{}\t{}\tlink [{}]".format(baseDebug, baseDebugImage, im["link"]))
 
                     # download image
                     try :
                         imgData = requests.get(im["link"])
-                    except :
-                        print("Error fetching image.")
+                        time.sleep(1)
+                    except requests.exceptions.RequestException as e:
+                        print("{}\t{}\t{}".format(baseDebug, baseDebugImage, e))
                         break
 
-                    # save image
-                    with open("{}{}_{}.jpg".format(folderToSave, tweet["id"], idImage), 'wb') as imgFile :
-                        imgFile.write(imgData.content)
+                    # get folder to save the image in and create it if it doesn't exist
+                    imgSubFolder = imageFolder + fileNameJustDate
+                    if not os.path.exists(imgSubFolder):
+                        os.makedirs(imgSubFolder)
 
-                    # wait 1 second
-                    time.sleep(1)
+                    imgPath = "{}/{}_{}.jpg".format(imgSubFolder, tweet["id"], idImage)
+                    print("{}\t{}\tsaving at [{}]".format(baseDebug, baseDebugImage, imgPath))
+                    with open(imgPath, 'wb') as imgFile :
+                        imgFile.write(imgData.content)
 
                     # incr
                     idImage = idImage + 1
-
-            #
-            print("[{}] {} / {} ({}) {}".format(file, tweetNum, tweetTotal, tweet["id"], imageState))
 
 print("{} images and {} tweets.".format(numImageTotal, tweetTotalTotal))

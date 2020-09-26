@@ -128,8 +128,8 @@ function makeUL(array) {
 }
 
 // get list of files
-var tweetFolder = "./../../../DATA/fromChecker/";
-var logFileName = "./../../../DATA/log/savedTweets.txt";
+var tweetFolder = "./../../DATA/fromChecker/";
+var logFileName = "./../../DATA/log/savedTweets.txt";
 var currentFileName = "";
 var listOfFiles = []
 var idsList = [];
