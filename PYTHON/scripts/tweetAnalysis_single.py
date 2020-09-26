@@ -13,12 +13,12 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # process tweet
-tweet_id = "1308052070541529091"
+tweet_id = "1309525089650724864"
 tweet_status = api.get_status(tweet_id, tweet_mode="extended")
 tweet_content = tweet_status._json
 
 #
-print(tweet_content["possibly_sensitive"])
+#print(tweet_content["possibly_sensitive"])
 
 #
 with open('./tweetAnalysis.json', 'w') as outfile:

@@ -41,6 +41,9 @@ todayFile = datetime.datetime.now().strftime('%d-%m-%Y') + ".json"
 # get files that are in toclean/ folder but not in store folder, also ignore file from today
 filesToProcess = [f for f in filesFromFolder_toclean if f not in filesFromFolder and f != todayFile]
 
+# log
+print("[jsonCleaner - {}] Processing {} files.".format(folderToProcess, len(filesToProcess)))
+
 # loop through all files and
 for el in filesToProcess:
 

@@ -5,8 +5,7 @@
 #
 
 import tweepy
-from os import listdir
-from os.path import isfile, join
+import os
 import requests
 from keys import *
 import json
@@ -18,23 +17,28 @@ import datetime
 def processTweet(_tweet) :
     # get extended tweet
     try :
-        tweet_status = _api.get_status(_id, tweet_mode="extended")
+        tweet_status = api.get_status(_tweet["id"], tweet_mode="extended")
     except tweepy.TweepError as e:
         return -1, None
+
+    # get content
+    tweet_content = tweet_status._json
+
+    # check if tweet has retweets or favorites
+    if(tweet_content["retweet_count"] > 0 or tweet_content["favorite_count"] > 0) :
+        return -2, None
+
+    # check if tweet is sensitive according to Twitter API
+    if("possibly_sensitive" in tweet_content and tweet_content["possibly_sensitive"]) :
+        return -3, None
 
     # get today's date
     dateToday = datetime.datetime.now().strftime("%d/%m/%Y")
 
     # append stuff to tweet
     _tweet['checked_at']     = dateToday
-    _tweet['retweet_count']  = tweet_status.retweet_count
-    _tweet['favorite_count'] = tweet_status.favorite_count
-
-    if(_tweet['retweet_count'] > 0 or _tweet['favorite_count'] > 0) :
-        return -2, None
-
-    if(_tweet["possibly_sensitive"] == True) :
-        return -3, None
+    _tweet['retweet_count']  = tweet_content["retweet_count"]
+    _tweet['favorite_count'] = tweet_content["favorite_count"]
 
     return 1, _tweet
 
@@ -50,9 +54,9 @@ checkerFolder_toclean = "../../DATA/fromChecker/toclean/"
 imageFolder = "../../DATA/images/"
 
 # get files
-filesFromStreamer = [f for f in listdir(streamerFolder) if isfile(join(streamerFolder, f))]
-filesFromChecker = [f for f in listdir(checkerFolder) if isfile(join(checkerFolder, f))]
-filesFromChecker_toclean = [f for f in listdir(checkerFolder_toclean) if isfile(join(checkerFolder_toclean, f))]
+filesFromStreamer = [f for f in os.listdir(streamerFolder) if os.path.isfile(os.path.join(streamerFolder, f))]
+filesFromChecker = [f for f in os.listdir(checkerFolder) if os.path.isfile(os.path.join(checkerFolder, f))]
+filesFromChecker_toclean = [f for f in os.listdir(checkerFolder_toclean) if os.path.isfile(os.path.join(checkerFolder_toclean, f))]
 
 # get today's date
 today = datetime.datetime.now()
@@ -60,6 +64,9 @@ today = datetime.datetime.now()
 
 # filter out files that are less than 2 weeks old and files that have already been checked
 filesToProcess = [f for f in filesFromStreamer if datetime.datetime.strptime(f.split('.')[0], "%d-%m-%Y") < today - datetime.timedelta(days=15) and f.split('.')[0] + "_checked.json" not in filesFromChecker_toclean]
+
+# log
+print("[tweetChecker] Processing {} files.".format(len(filesToProcess)))
 
 # init some variables
 numImageTotal = 0
@@ -97,10 +104,6 @@ for file in filesToProcess :
 
             # process tweet
             res, tweet_checked = processTweet(tweet)
-
-            #
-            res = 1
-            tweet_checked = tweet
 
             # set success state
             successState = ""
@@ -143,6 +146,11 @@ for file in filesToProcess :
                         print("{}\t{}\t{}".format(baseDebug, baseDebugImage, e))
                         break
 
+                    # get folder to save the image in and create it if it doesn't exist
+                    imgSubFolder = imageFolder + fileToPrint
+                    if not os.path.exists(imgSubFolder):
+                        os.makedirs(imgSubFolder)
+
                     # save image
                     imgPath = "{}{}/{}_{}.jpg".format(imageFolder, fileToPrint, tweet["id"], idImage)
                     print("{}\t{}\tsaving at [{}]".format(baseDebug, baseDebugImage, imgPath))
@@ -153,7 +161,10 @@ for file in filesToProcess :
                     idImage = idImage + 1
 
 
-                # write to file
-                with open(checkerFolder_toclean + fileToPrint + '_checked.json', 'a') as outfile:
-                    json.dump(tweet_checked, outfile)
-                    outfile.write('\n')
+            # write to file
+            with open(checkerFolder_toclean + fileToPrint + '_checked.json', 'a') as outfile:
+                json.dump(tweet_checked, outfile)
+                outfile.write('\n')
+
+            # debug
+            print("{}\tTweet saved.".format(baseDebug))

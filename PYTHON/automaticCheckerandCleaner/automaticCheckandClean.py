@@ -3,8 +3,8 @@ import subprocess
 import time
 
 # fetch sys arguments
-procWait    = int(sys.argv[2])
-timeType    = sys.argv[3]
+procWait    = int(sys.argv[1])
+timeType    = sys.argv[2]
 
 # handle time types
 timeMult = 0
@@ -33,15 +33,15 @@ while True :
 
     # clean fromStreamer folder
     cleanFromStreamer = subprocess.Popen([sys.executable, "jsonCleaner.py", "fromStreamer"])
-    tellTime.communicate()
+    cleanFromStreamer.communicate()
 
     # clean fromChecker folder
     cleanFromStreamer = subprocess.Popen([sys.executable, "jsonCleaner.py", "fromChecker"])
-    tellTime.communicate()
+    cleanFromStreamer.communicate()
 
     # check tweets
-    tellTime = subprocess.Popen([sys.executable, "tweetChecker.py"])
-    tellTime.communicate()
+    tweetChecker = subprocess.Popen([sys.executable, "tweetChecker.py"])
+    tweetChecker.communicate()
 
     #
     tOut = time.time()
