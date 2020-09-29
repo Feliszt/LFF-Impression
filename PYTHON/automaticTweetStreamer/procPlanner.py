@@ -9,6 +9,11 @@ import signal
 import subprocess
 import sys
 
+# edit python command depending on OS
+pythonCmd = "python"
+if sys.platform == "linux" or platform == "linux2":
+    pythonCmd = "python3"
+
 # fetch sys arguments
 procName    = sys.argv[1]
 procLength  = int(sys.argv[2])
@@ -38,7 +43,7 @@ while True :
     # start process
     timeNow = time.time().strftime("%d-%m-%Y %H:%M:%S")
     print("[STREAMPLANNER @ {}]\tStart process for {} {}.".format(timeNow, procLength, timeTypeString))
-    process = subprocess.Popen(['python', procName + '.py'])
+    process = subprocess.Popen([pythonCmd, procName + '.py'])
 
     # run process for specified time
     time.sleep(procLength * timeMult)
