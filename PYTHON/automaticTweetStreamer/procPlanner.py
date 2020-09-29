@@ -4,6 +4,7 @@
 #
 
 import time
+import datetime
 import os
 import signal
 import subprocess
@@ -49,7 +50,7 @@ while True :
     time.sleep(procLength * timeMult)
 
     # kill process
-    timeNow = time.time().strftime("%d-%m-%Y %H:%M:%S")
+    timeNow = datetime.datetime.fromtimestamp(time.time()).strftime("%d-%m-%Y %H:%M:%S")
     print("[STREAMPLANNER @ {}]\tKill process and wait {} {}.".format(timeNow, procWait, timeTypeString))
     process.kill()
 
