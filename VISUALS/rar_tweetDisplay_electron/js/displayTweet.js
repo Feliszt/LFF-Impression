@@ -156,4 +156,4 @@ loadFileNames(tweetFolder).then((files) => {
 
 
 // create append stream
-var stream = fs.createWriteStream("./assets/savedTweets.txt", {flags:'a'});
+var stream = fs.createWriteStream("../../DATA/log/savedTweets.txt", {flags:'a'});

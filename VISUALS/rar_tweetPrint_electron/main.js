@@ -20,8 +20,8 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 565,
-    height: 800,
+    width: 1200,
+    height: 1190,
     webPreferences: {
       nodeIntegration: true
     }
@@ -75,11 +75,11 @@ ipc.on('print-to-pdf', (event, messages) => {
   console.log(messages)
 
   win.webContents.printToPDF({
-    marginsType: 0,
-    printBackground: false,
-    printSelectionOnly: false,
+    marginsType: 1,
+    printBackground: true,
+    printSelectionOnly: true,
     landscape: false,
-    pageSize: 'A4',
+    pageSize: 'A3',
     scaleFactor: 100
   }).then(data => {
       fs.writeFile('./assets/print02.pdf', data, (error) => {
