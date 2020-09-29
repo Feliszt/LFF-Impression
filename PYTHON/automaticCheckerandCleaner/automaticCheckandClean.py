@@ -58,13 +58,16 @@ while True :
     cleanFromStreamer = subprocess.Popen([sys.executable, "jsonCleaner.py", "fromStreamer"])
     cleanFromStreamer.communicate()
 
-    # clean fromChecker folder
-    cleanFromStreamer = subprocess.Popen([sys.executable, "jsonCleaner.py", "fromChecker"])
-    cleanFromStreamer.communicate()
-
     # check tweets
     tweetChecker = subprocess.Popen([sys.executable, "tweetChecker.py"])
     tweetChecker.communicate()
+
+    # cautious wait
+    time.sleep(1)
+
+    # clean fromChecker folder
+    cleanFromStreamer = subprocess.Popen([sys.executable, "jsonCleaner.py", "fromChecker"])
+    cleanFromStreamer.communicate()
 
     #
     tOut = time.time()
