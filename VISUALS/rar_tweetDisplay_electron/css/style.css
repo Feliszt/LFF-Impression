@@ -69,12 +69,19 @@ img.emoji {
 }
 
 /* The container <div> - needed to position the dropdown content */
-.dropdown {
+#jsonFileList {
   float: right;
   position: relative;
   top: -55px;
   right: 50px;
+}
 
+/* The container <div> - needed to position the dropdown content */
+#savedTweetsList {
+  float: right;
+  position: relative;
+  top: -55px;
+  right: 780px;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -85,7 +92,6 @@ img.emoji {
  min-width: 160px;
  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
  z-index: 1;
-
 }
 
 /* Links inside the dropdown */

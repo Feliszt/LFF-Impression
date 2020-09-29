@@ -36,14 +36,16 @@ if timeMult == 0 :
 while True :
 
     # start process
-    print("[STREAMPLANNER]\tStart process for " + str(procLength) + " " + timeTypeString + ".")
+    timeNow = time.time().strftime("%d-%m-%Y %H:%M:%S")
+    print("[STREAMPLANNER @ {}]\tStart process for {} {}.".format(timeNow, procLength, timeTypeString))
     process = subprocess.Popen(['python', procName + '.py'])
 
     # run process for specified time
     time.sleep(procLength * timeMult)
 
     # kill process
-    print("[STREAMPLANNER]\tKill process and wait " + str(procWait) + " " + timeTypeString + ".\n")
+    timeNow = time.time().strftime("%d-%m-%Y %H:%M:%S")
+    print("[STREAMPLANNER @ {}]\tKill process and wait {} {}.".format(timeNow, procWait, timeTypeString))
     process.kill()
 
     # wait until next start

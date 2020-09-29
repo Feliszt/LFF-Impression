@@ -137,7 +137,7 @@ var idsList = [];
 // load tweets of first file to start
 loadFileNames(tweetFolder).then((files) => {
   // set drop down list
-  var dropdownlist = document.getElementById('dropdown-list');
+  var dropdownlist = document.getElementById('dropdown-list-files');
   dropdownlist.innerHTML = '';
   files.forEach(file => {
     var listElTemp = document.createElement('a');
@@ -156,4 +156,4 @@ loadFileNames(tweetFolder).then((files) => {
 
 
 // create append stream
-var stream = fs.createWriteStream("../../DATA/log/savedTweets.txt", {flags:'a'});
+var stream = fs.createWriteStream(logFileName, {flags:'a'});

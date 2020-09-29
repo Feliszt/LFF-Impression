@@ -73,9 +73,12 @@ numImageTotal = 0
 numTweetTotal = 0
 
 # loop through files
+fileIter = 0
+fileNum = len(filesToProcess)
 for file in filesToProcess :
     # get file name only
     fileToPrint = file.split('.')[0]
+    fileIter = fileIter + 1
 
     # print info
     print("Processing [{}].".format(fileToPrint))
@@ -99,7 +102,7 @@ for file in filesToProcess :
             tweetNum = tweetNum + 1
 
             # print info
-            baseDebug = "{} / {} of {}".format(tweetNum, tweetTotal, fileToPrint)
+            baseDebug = "{} / {} of [{}] file {} / {}".format(tweetNum, tweetTotal, fileToPrint, fileIter, fileNum)
             print("{}\t[{}]".format(baseDebug, tweet["id"]))
 
             # process tweet
