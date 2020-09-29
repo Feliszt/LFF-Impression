@@ -42,7 +42,7 @@ if timeMult == 0 :
 while True :
 
     # start process
-    timeNow = time.time().strftime("%d-%m-%Y %H:%M:%S")
+    timeNow = datetime.datetime.fromtimestamp(time.time()).strftime("%d-%m-%Y %H:%M:%S")
     print("[STREAMPLANNER @ {}]\tStart process for {} {}.".format(timeNow, procLength, timeTypeString))
     process = subprocess.Popen([pythonCmd, procName + '.py'])
 
