@@ -23,6 +23,7 @@ VISUALS/rar_tweetPrint_electron/dist
 *.pdf
 *.txt
 *.indd
+*.idlk
 
 *.jpg
 *.db*
