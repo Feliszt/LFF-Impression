@@ -1,6 +1,7 @@
 import sys
 import subprocess
 import time
+import datetime
 
 # display time with XX days XX hours XX minutes XX seconds format from
 # seconds in int
