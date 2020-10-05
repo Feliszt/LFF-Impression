@@ -67,6 +67,8 @@ function loadTweets(fileName) {
 }
 
 function saveFunc(id) {
+  //console.log(id);
+
   // if id in list, return now
   if(idsList.includes(id)) {
     console.log("id [" + id + "] already saved.");
@@ -77,8 +79,12 @@ function saveFunc(id) {
   document.getElementById(id).style.backgroundColor = "rgba(62, 140, 38, 0.5)";
 
   // save to stream
-  stream.write(currentFileName + " " + id + "\n");
+  var dataToAppend = currentFileName + " " + id + "\n";
+  //stream.write(dataToAppend);
   console.log("saving id [" + id + "].");
+
+  //
+  fs.appendFileSync(logFileName, dataToAppend);
 
   // save to list
   idsList.push(id);
@@ -95,29 +101,29 @@ function makeUL(array) {
         tweetInstance.setAttribute("id", array[i]["id_str"]);
 
         // set link
-        var tweetLink = document.createElement('a');
-        tweetLink.setAttribute("href", "https://twitter.com/" + array[i]["user_screen_name"] + "/status/" + array[i]["id_str"]);
-        tweetLink.setAttribute("class", "tweet-link");
-        tweetInstance.appendChild(tweetLink);
+        var tweetSave = document.createElement('a');
+        tweetSave.setAttribute("href", "javascript:saveFunc('" + array[i]["id_str"] + "');" );
+        tweetSave.setAttribute("class", "tweet-save");
+        tweetInstance.appendChild(tweetSave);
 
         // set text
         var tweetText = document.createElement('div');
         tweetText.setAttribute("class", "tweet-text");
         tweetText.appendChild(document.createTextNode(array[i]["text"]));
-        tweetLink.appendChild(tweetText);
+        tweetSave.appendChild(tweetText);
 
         // set date
         var tweetDate = document.createElement('div');
         tweetDate.setAttribute("class", "tweet-date");
         tweetDate.appendChild(document.createTextNode(array[i]["created_at"]));
-        tweetLink.appendChild(tweetDate);
+        tweetSave.appendChild(tweetDate);
 
         // set button
-        var tweetButton = document.createElement('BUTTON');
-        tweetButton.innerHTML = "save";
-        tweetButton.setAttribute("class", "saveButton");
-        tweetButton.setAttribute("onclick", "saveFunc('" + array[i]["id_str"] + "');");
-        tweetInstance.appendChild(tweetButton);
+        var tweetLink = document.createElement('a');
+        tweetLink.innerHTML = "see tweet";
+        tweetLink.setAttribute("class", "goToTwitter");
+        tweetLink.setAttribute("href", "https://twitter.com/" + array[i]["user_screen_name"] + "/status/" + array[i]["id_str"]);
+        tweetSave.appendChild(tweetLink);
 
         // Add it to the list:
         tweetsList.appendChild(tweetInstance);
@@ -128,8 +134,10 @@ function makeUL(array) {
 }
 
 // get list of files
+var logFileName = "testEmojis";
 var tweetFolder = "./../../DATA/fromChecker/";
-var logFileName = "./../../DATA/log/savedTweets.txt";
+var logFileFolder = "./../../DATA/log/";
+logFileName = logFileFolder + logFileName + ".txt";
 var currentFileName = "";
 var listOfFiles = []
 var idsList = [];
@@ -140,8 +148,13 @@ loadFileNames(tweetFolder).then((files) => {
   var dropdownlist = document.getElementById('dropdown-list-files');
   dropdownlist.innerHTML = '';
   files.forEach(file => {
+    // set display name
+    var fileDisplay = file.split('_');
+    fileDisplay = fileDisplay[0];
+
+    // create dom element
     var listElTemp = document.createElement('a');
-    listElTemp.innerHTML = file;
+    listElTemp.innerHTML = fileDisplay;
     listElTemp.setAttribute("class", "tweetFileLink");
     listElTemp.setAttribute("onclick", "loadTweets('" + file + "');");
     dropdownlist.appendChild(listElTemp);
@@ -151,7 +164,7 @@ loadFileNames(tweetFolder).then((files) => {
   loadSavedLog(logFileName);
 
   // load first file
-  loadTweets(files[0]);
+  //loadTweets(files[0]);
 }).catch((error) => console.log(error));
 
 

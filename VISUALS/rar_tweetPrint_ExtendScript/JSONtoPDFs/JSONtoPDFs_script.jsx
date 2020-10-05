@@ -1,5 +1,12 @@
 ﻿#include "../lib/json2.js"
 
+//  set variables
+var TWEET2INFO = 10.0;
+var INTERINFO =  5.0;
+var FONTMIN = 12;
+var FONTMAX = 80;
+var EVENTNAME = "test";
+
 /*
  -- load and read JSON
 */
@@ -31,21 +38,17 @@ var doc = app.activeDocument;
 var curSpread = doc.layoutWindows[0].activeSpread;
 var spreadItems = curSpread.allPageItems;
 
-//  set variables
-var TWEET2INFO = 10.0;
-var INTERINFO =  5.0;
-var FONTMIN = 12;
-var FONTMAX = 90;
-
 // load pdf preset
 var myPDFExportPreset = app.pdfExportPresets.item("RAR_PDF_PRESET");
 
-// setup folders
-var savedPDFFolder  = "D:/PERSO/_CREA/rar/_DEV/VISUALS/rar_tweetPrint_ExtendScript/JSONtoPDFs/res/";
-var inputFolder         = "D:/PERSO/_CREA/rar/_DEV/DATA/log/";
+// setup folders and files
+var eventsFolder         = "D:/PERSO/_CREA/rar/_DEV/DATA/events/";
+var eventFolder         = eventsFolder + EVENTNAME + "/";
+var savedPDFFolder   = eventFolder + "pdfs/";
+var fileTweetsFinal     = eventFolder + EVENTNAME + "_tweetsFinal.json";
 
 // load json
-tweets =  readJSON (File(inputFolder + "savedTweets_json.json"));
+tweets =  readJSON (File(fileTweetsFinal));
 
 // init items variables
 var tweet_text;
@@ -62,11 +65,14 @@ for (var i = 0; i < spreadItems.length; i += 1) {
   if (si.itemLayer.locked) continue;
   
   // get elements
-  if(si.name === "tweet_text")       tweet_text = si;
-  if(si.name === "tweet_date")      tweet_date= si;
-  if(si.name === "tweet_hour")      tweet_hour = si;
-  if(si.name === "id")                    tweet_id = si;
-  if(si.name === "page_size")        page_size = si;
+  if(si.name === "tweet_text")                             tweet_text = si;
+  if(si.name === "tweet_date")                            tweet_date= si;
+  if(si.name === "tweet_hour")                            tweet_hour = si;
+  if(si.name === "id")                                          tweet_id = si;
+  if(si.name === "impression_nb_in_session")       impression_nb_in_session = si;
+  if(si.name === "session_nb")                             session_nb = si;
+  if(si.name === "impression_date")                     impression_date = si;
+  if(si.name === "page_size")                              page_size = si;
 };
 
 // get page size
@@ -93,6 +99,10 @@ for(var i = 0; i < tweets.length; i+= 1) {
     tweet_date.contents = tweets[i]["created_at_date_readable"];
     tweet_hour.contents = tweets[i]["created_at_hour_readable"];
     tweet_id.contents = tweets[i]["id_str"];
+    impression_nb_in_session.contents = tweets[i]["printIndexPadded"];
+    session_nb.contents = tweets[i]["sessionIndex"];
+    impression_date.contents = tweets[i]["printed_at_date_readable"];
+    
     
     // create group
     var itemsToDistribute = [];
@@ -117,7 +127,7 @@ for(var i = 0; i < tweets.length; i+= 1) {
     $.writeln("[tweet_hour]\twidth = " + tweet_hour_sz[0] + "\theight = " + tweet_hour_sz[1]);
     
     // compute full height of those 3 elements and first y-position
-    var allH = tweet_text_sz[1];// + tweet_date_sz[1] + tweet_hour_sz[1] + TWEET2INFO + INTERINFO;
+    var allH = tweet_text_sz[1] ; //+ tweet_date_sz[1] + tweet_hour_sz[1] + TWEET2INFO + INTERINFO;
     var topY = (page_sz[1] - allH) / 2;
     
     // set tweet_text position
@@ -132,7 +142,8 @@ for(var i = 0; i < tweets.length; i+= 1) {
     tweet_hour.geometricBounds = [topY, tweet_hour_bounds[1], topY + tweet_hour_sz[1], tweet_hour_bounds[3]];
     
     // print to pdf
-    var filename = tweets[i]["id_str"] + ".pdf";
-    $.writeln("Saving with name [" + filename + "]");
-    app.activeDocument.exportFile(ExportFormat.pdfType, File(savedPDFFolder + filename), false, myPDFExportPreset);
+    var filename = tweets[i]["printIndex"] + "_" + tweets[i]["id_str"] + ".pdf";
+    var filePath = savedPDFFolder + tweets[i]["printed_at_date_saving"] + "/";
+    $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
+    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename), false, myPDFExportPreset);
 }
