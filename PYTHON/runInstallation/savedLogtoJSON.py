@@ -64,9 +64,14 @@ if(not os.path.isdir(eventFolder)) :
 print("{}Working with event [{}]".format(baseDebug, eventName))
 
 # set files
-logFile = eventFolder + eventName + "_tweetsLog.txt"
-scheduleFile = eventFolder + eventName + "_schedule.json"
+logFile         = eventFolder + eventName + "_tweetsLog.txt"
+scheduleFile    = eventFolder + eventName + "_schedule.json"
 tweetsFinalFile = eventFolder + eventName + "_tweetsFinal.json"
+printLogFile    = eventFolder + eventName + "_printlog.txt"
+
+# create and reset printLog file
+with open(printLogFile, "w") as f:
+    f.write("")
 
 # check if file exists / logFile
 if(not os.path.isfile(logFile)) :
@@ -193,7 +198,9 @@ for el in scheduleData["sessions"] :
     tweetPrintedAt_dateReadable = "{} {} {}".format(tweetPrintedAt_day, tweetPrintedAt_monthReadable, tweetPrintedAt_year)
 
     # create folder
-    os.mkdir(eventFolder + "pdfs/" + tweetPrintedAt_dateSaving)
+    sessionPDFFolder = eventFolder + "pdfs/" + tweetPrintedAt_dateSaving
+    if(not os.path.isdir(sessionPDFFolder)):
+        os.mkdir(sessionPDFFolder)
 
     #
     for i in range(1, el["numberPrintsMax"] + 1) :

@@ -17,9 +17,19 @@ def fileLen(_fileName):
 baseDebug = "[runRAR]\t"
 
 # check for inputs
-if(len(sys.argv) != 2) :
-    print("{}Script needs exactly one argument that is the name of the event.".format(baseDebug))
+if(len(sys.argv) != 2 and len(sys.argv) != 3) :
+    print("{}Script needs exactly either 1 argument that is the name of the event or 2 with option to TESTPRINT.".format(baseDebug))
     quit()
+
+# check if testprint
+testPrint = False
+if(len(sys.argv) == 3 and sys.argv[2] == "TESTPRINT") :
+    testPrint = True
+
+# set testprintfile
+testPrintFolder = "../../DATA/others/"
+testPrintFileName   = "testPrintFile.pdf"
+testPrintFile = testPrintFolder + testPrintFileName
 
 # set up folder
 eventsFolder = "../../DATA/events/"
@@ -113,7 +123,7 @@ if(not os.path.isfile(printLogFile)) :
     print("{}Log file for session [{}] of event [{}] doesn't exist. Creating it.".format(baseDebug, nowDateHyphen, eventName))
 
 # set entry point in log
-numberInLog = max(1, fileLen(printLogFile))
+numberInLog = fileLen(printLogFile)
 
 # get times as datetime
 timeStart_datetime = datetime.datetime.strptime(nowDateHyphen + " " + timeStart, "%d-%m-%Y %H:%M")
@@ -125,9 +135,12 @@ sessionLength = sessionLength.total_seconds()
 timeToSession = timeStart_datetime - now
 timeToSession = timeToSession.total_seconds()
 
+# get readable now
+nowTimeReadable = now.strftime("%H:%M:%S")
+
 # check if we are within the bounds
 if(timeToSession < 0 and abs(timeToSession) > sessionLength) :
-    print("{}Starting script out of bounds for session [{}] of event [{}].".format(baseDebug, nowDateHyphen, eventName))
+    print("{}Starting script at [{}] is out of bounds for session [{}] of event [{}].".format(baseDebug, nowTimeReadable, nowDateHyphen, eventName))
     quit()
 
 # compute tme to wait
@@ -140,34 +153,56 @@ print("{}Waiting {} seconds for session [{}] of event [{}].".format(baseDebug, i
 time.sleep(timeToWait)
 
 # loop through all PDFs and print
-incrPDF = 1
+incrPDF = 0
 for pdf in PDFsToPrint:
     # ignore files that have been printed already
-    if(incrPDF <= numberInLog) :
+    if(incrPDF < numberInLog) :
         incrPDF = incrPDF + 1
         continue
 
     # get time
-    now = datetime.datetime.now()
-    now = now.strftime("%H:%M")
+    now_datetime = datetime.datetime.now()
+    now = now_datetime.strftime("%H:%M:%S")
+
+    # set print file
+    PDFToPrintName = pdf
+    PDFToPrintPath = eventPDFFolder + pdf
+    if(testPrint) :
+        PDFToPrintPath      = testPrintFile
+        PDFToPrintName      = testPrintFileName
 
     # get id of tweet
-    tweetId = pdf.split(".")[0].split("_")[1]
+    PDFToPrintName = PDFToPrintName.split(".")[0]
 
     # print file
-    #os.startfile(pdf, 'print')
+    #os.startfile(PDFToPrintPath, 'print')
 
     # debug
-    print("{}#{}\tat time [{}]\ttweet id [{}] for session [{}] of event [{}].".format(baseDebug, incrPDF, now, tweetId, nowDateHyphen, eventName))
+    print("{}#{}\tat time [{}]\ttweet id [{}] for session [{}] of event [{}].".format(baseDebug, incrPDF + 1, now, PDFToPrintName, nowDateHyphen, eventName))
 
     # incr
     incrPDF = incrPDF + 1
 
     # write log
     with open(printLogFile, "a") as f:
-        f.write(nowDateHyphen + "\t" + tweetId + "\t" + now + "\n")
+        f.write(nowDateHyphen + "\t" + PDFToPrintName + "\t" + now + "\n")
 
     # wait
     timeToWait = random.uniform(printFreqMin, printFreqMax) * 60
-    print("{}Waiting {} seconds.".format(baseDebug, int(timeToWait)))
+    nextPrintAt_datetime = now_datetime + datetime.timedelta(seconds = timeToWait)
+    nextPrintAt = nextPrintAt_datetime.strftime("%H:%M:%S")
+
+    # check if last print
+    if(incrPDF == len(PDFsToPrint)) :
+        print("{}That was the last PDF to print for session [{}] of event [{}]. Quitting.".format(baseDebug, nowDateHyphen, eventName))
+        break
+
+    # check if out of bounds
+    if(nextPrintAt_datetime > timeEnd_datetime) :
+        timeEndReadable = timeEnd_datetime.strftime("%H:%M:%S")
+        print("{}Next print at [{}] will be past endTime [{}] for session [{}] of event [{}]. Quitting.".format(baseDebug, nextPrintAt, timeEndReadable, nowDateHyphen, eventName))
+        break
+
+    # wait
+    print("{}Waiting {} seconds. Next print at [{}].".format(baseDebug, int(timeToWait), nextPrintAt))
     time.sleep(timeToWait)
