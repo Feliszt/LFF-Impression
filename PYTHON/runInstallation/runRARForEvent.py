@@ -5,14 +5,6 @@ import datetime
 import json
 import random
 
-# return number of lines of file
-def fileLen(_fileName):
-    i = -1
-    with open(_fileName) as f:
-        for i, l in enumerate(f):
-            pass
-    return i + 1
-
 # define base debug
 baseDebug = "[runRARForEvent]\t"
 
@@ -119,11 +111,17 @@ if(not os.path.isfile(printLogFile)) :
     with open(printLogFile, "a"):
         ""
 
-    #
+    # debug
     print("{}Log file for session [{}] of event [{}] doesn't exist. Creating it.".format(baseDebug, nowDateHyphen, eventName))
 
-# set entry point in log
-numberInLog = fileLen(printLogFile)
+# set entry point in log by getting the number of line that corresponds to this session
+numberInLog = 0
+with open(printLogFile, "r") as f:
+    entries = f.readlines()
+    for entry in entries:
+        entryDate = entry.split("\t")[0]
+        if(entryDate == nowDateHyphen) :
+            numberInLog = numberInLog + 1
 
 # get times as datetime
 timeStart_datetime = datetime.datetime.strptime(nowDateHyphen + " " + timeStart, "%d-%m-%Y %H:%M")
@@ -188,7 +186,7 @@ for pdf in PDFsToPrint:
     # incr
     incrPDF = incrPDF + 1
 
-    # write log
+    # write printlog
     with open(printLogFile, "a") as f:
         f.write(nowDateHyphen + "\t" + PDFToPrintName + "\t" + now + "\n")
 
