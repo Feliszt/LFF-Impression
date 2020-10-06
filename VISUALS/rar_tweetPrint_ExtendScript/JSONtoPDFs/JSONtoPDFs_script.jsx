@@ -168,6 +168,19 @@ for(var i = 0; i < tweets.length; i+= 1) {
     // unflip element and ungroup
     spreadItemsGroup.rotationAngle  = 0;
     spreadItemsGroup.ungroup();
+
+    // hide certain elements to create a PDF that will be used in video
+    impression_nb_in_session.visible = false;
+    session_nb.visible = false;
+    impression_date.visible = false;
+    
+    // print
+    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_bare.pdf"), false, myPDFExportPreset);
+    
+    // unhide certain elements to create a PDF that will be used in video
+    impression_nb_in_session.visible = true;
+    session_nb.visible = true;
+    impression_date.visible = true;
     
     // debug
     $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
