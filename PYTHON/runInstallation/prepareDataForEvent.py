@@ -25,7 +25,7 @@ def searchTweet(_file, _id) :
                 return tweet
 
 # define base debug
-baseDebug = "[savedLogtoJSON]\t"
+baseDebug = "[prepareDataForEvent]\t"
 
 # map the inputs to the function blocks
 months = { 1    : "janvier",
@@ -197,7 +197,7 @@ for el in scheduleData["sessions"] :
     tweetPrintedAt_dateSaving = "{}-{}-{}".format(tweetPrintedAt_day, tweetPrintedAt_month, tweetPrintedAt_year)
     tweetPrintedAt_dateReadable = "{} {} {}".format(tweetPrintedAt_day, tweetPrintedAt_monthReadable, tweetPrintedAt_year)
 
-    # create folder
+    # create folders
     sessionPDFFolder = eventFolder + "pdfs/" + tweetPrintedAt_dateSaving
     if(not os.path.isdir(sessionPDFFolder)):
         os.mkdir(sessionPDFFolder)

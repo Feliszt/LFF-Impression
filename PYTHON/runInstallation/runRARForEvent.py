@@ -14,7 +14,7 @@ def fileLen(_fileName):
     return i + 1
 
 # define base debug
-baseDebug = "[runRAR]\t"
+baseDebug = "[runRARForEvent]\t"
 
 # check for inputs
 if(len(sys.argv) != 2 and len(sys.argv) != 3) :
@@ -86,20 +86,20 @@ nowDateHyphen = now.strftime("%d-%m-%Y")
 nowDateSlash = now.strftime("%d/%m/%Y")
 
 # get pdf folder for today
-todayPDFFolder = eventPDFFolder + nowDateHyphen + "/"
+sessionPDFFolder = eventPDFFolder + nowDateHyphen + "/"
 
 # check if there's folder for date
-if(not os.path.isdir(todayPDFFolder)) :
+if(not os.path.isdir(sessionPDFFolder)) :
     print("{}PDF folder for today's session [{}] of event [{}] doesn't exist.".format(baseDebug, nowDateHyphen, eventName))
     quit()
 
 # check if folder is empty
-if len(os.listdir(todayPDFFolder)) == 0:
+if len(os.listdir(sessionPDFFolder)) == 0:
     print("{}PDF folder for today's session [{}] of event [{}] is empty.".format(baseDebug, nowDateHyphen, eventName))
     quit()
 
 # get pdfs to prints
-PDFsToPrint = os.listdir(todayPDFFolder)
+PDFsToPrint = [f for f in os.listdir(sessionPDFFolder) if "_flipped" in f]
 
 # get info about today's status
 timeStart = ""
@@ -166,16 +166,21 @@ for pdf in PDFsToPrint:
 
     # set print file
     PDFToPrintName = pdf
-    PDFToPrintPath = eventPDFFolder + pdf
+    PDFToPrintPath = sessionPDFFolder + pdf
     if(testPrint) :
         PDFToPrintPath      = testPrintFile
         PDFToPrintName      = testPrintFileName
 
-    # get id of tweet
+    # get name of tweet
     PDFToPrintName = PDFToPrintName.split(".")[0]
 
+    # if windows we have to reformat the path
+    PDFToPrintPath_final = PDFToPrintPath
+    if(sys.platform == "win32"):
+        PDFToPrintPath_final = os.path.join(os.getcwd(), "\\".join(PDFToPrintPath.split("/")))
+
     # print file
-    #os.startfile(PDFToPrintPath, 'print')
+    os.startfile(PDFToPrintPath_final, 'print')
 
     # debug
     print("{}#{}\tat time [{}]\ttweet id [{}] for session [{}] of event [{}].".format(baseDebug, incrPDF + 1, now, PDFToPrintName, nowDateHyphen, eventName))

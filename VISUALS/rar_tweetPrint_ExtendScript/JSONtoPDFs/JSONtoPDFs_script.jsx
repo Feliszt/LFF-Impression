@@ -141,9 +141,34 @@ for(var i = 0; i < tweets.length; i+= 1) {
     // set tweet_hour position
     tweet_hour.geometricBounds = [topY, tweet_hour_bounds[1], topY + tweet_hour_sz[1], tweet_hour_bounds[3]];
     
-    // print to pdf
-    var filename = tweets[i]["printIndex"] + "_" + tweets[i]["id_str"] + ".pdf";
+    // set path and file name
+    var filename = tweets[i]["printIndexPadded"] + "_" + tweets[i]["id_str"];
     var filePath = savedPDFFolder + tweets[i]["printed_at_date_saving"] + "/";
+    
+    // save normal pdf
+    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + ".pdf"), false, myPDFExportPreset);
+    
+    // group content
+    var spreadItemsArray = []
+    spreadItemsArray.push(tweet_text);
+    spreadItemsArray.push(tweet_date);
+    spreadItemsArray.push(tweet_hour);
+    spreadItemsArray.push(tweet_id);
+    spreadItemsArray.push(impression_nb_in_session);
+    spreadItemsArray.push(session_nb);
+    spreadItemsArray.push(impression_date);
+    var spreadItemsGroup = curSpread.groups.add(spreadItemsArray);
+    
+    // flip element
+    spreadItemsGroup.rotationAngle  = 180;
+    
+    // save flipped pdf
+    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
+    
+    // unflip element and ungroup
+    spreadItemsGroup.rotationAngle  = 0;
+    spreadItemsGroup.ungroup();
+    
+    // debug
     $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
-    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename), false, myPDFExportPreset);
 }

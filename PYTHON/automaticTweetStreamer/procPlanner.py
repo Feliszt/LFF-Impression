@@ -12,7 +12,7 @@ import sys
 
 # edit python command depending on OS
 pythonCmd = "python"
-if sys.platform == "linux" or platform == "linux2":
+if sys.platform == "linux" or sys.platform == "linux2":
     pythonCmd = "python3"
 
 # fetch sys arguments
