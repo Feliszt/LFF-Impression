@@ -8,16 +8,23 @@ import json
 import datetime
 
 # specify folder
-folderToProcess = "../_TWEETS_AND_DATA/fromStreamer/toclean/"
+folderToProcess = "../../DATA/fromChecker/"
 folderToSave = folderToProcess + "temp/"
 
 # get files
 onlyfiles = [f for f in listdir(folderToProcess) if isfile(join(folderToProcess, f))]
 
+# filter
+fileToProcess = ["27-08-2020", "28-08-2020", "29-08-2020", "30-08-2020", "31-08-2020", "01-09-2020", "02-09-2020", "03-09-2020", "04-09-2020", "05-09-2020", "06-09-2020", "07-09-2020"]
+
 # loop through files
 for file in onlyfiles :
     # get file name
-    fileName = file.split('.')[0]
+    fileName = file.split('.')[0].split('_')[0]
+
+
+    if(fileName not in fileToProcess):
+        continue
 
     # init tweet list
     tweet_list = []
@@ -26,11 +33,13 @@ for file in onlyfiles :
     # save all lines in a dict
     with open(folderToSave + file, "w", encoding="utf8") as file_out:
         with open(folderToProcess + file, "r", encoding="utf8") as file_in:
-            lines = file_in.readlines()
-            for line in lines:
-                numtweet += 1
-                tweet = json.loads(line)
+            #
+            tweets = json.load(file_in)["tweets"]
 
+            #
+            tweets_modified = []
+
+            for tweet in tweets :
                 #
                 timeCreated = tweet["created_at"]
                 timeCreated_dtobject =  datetime.datetime.strptime(timeCreated, '%Y-%m-%d %H:%M:%S')
@@ -42,6 +51,9 @@ for file in onlyfiles :
                 tweet["created_at"] = str(timeCreated_dtobject_correct)
 
                 #
-                json.dump(tweet, file_out)
-                file_out.write('\n')
-                #print("{}\t{}".format(timeCreated_dtobject, timeCreated_dtobject_correct))
+                tweets_modified.append(tweet)
+
+            #
+            tweets = {}
+            tweets["tweets"] = tweets_modified
+            json.dump(tweets, file_out)

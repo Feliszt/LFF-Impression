@@ -5,7 +5,7 @@ var TWEET2INFO = 10.0;
 var INTERINFO =  5.0;
 var FONTMIN = 12;
 var FONTMAX = 80;
-var EVENTNAME = "test";
+var EVENTNAME = "pilote";
 
 /*
  -- load and read JSON

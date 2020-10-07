@@ -84,7 +84,7 @@ function saveFunc(id) {
   console.log("saving id [" + id + "].");
 
   //
-  fs.appendFileSync(logFileName, dataToAppend);
+  fs.appendFileSync(eventLogFile, dataToAppend);
 
   // save to list
   idsList.push(id);
@@ -134,10 +134,10 @@ function makeUL(array) {
 }
 
 // get list of files
-var logFileName = "testEmojis";
+var eventName = "pilote";
 var tweetFolder = "./../../DATA/fromChecker/";
-var logFileFolder = "./../../DATA/log/";
-logFileName = logFileFolder + logFileName + ".txt";
+var eventsFolder = "./../../DATA/events/";
+eventLogFile = eventsFolder + eventName + "/" + eventName + "_tweetsLog.txt";
 var currentFileName = "";
 var listOfFiles = []
 var idsList = [];
@@ -161,7 +161,7 @@ loadFileNames(tweetFolder).then((files) => {
   })
 
   // load log of saved tweets
-  loadSavedLog(logFileName);
+  loadSavedLog(eventLogFile);
 
   // load first file
   //loadTweets(files[0]);
@@ -169,4 +169,4 @@ loadFileNames(tweetFolder).then((files) => {
 
 
 // create append stream
-var stream = fs.createWriteStream(logFileName, {flags:'a'});
+var stream = fs.createWriteStream(eventLogFile, {flags:'a'});

@@ -7,6 +7,7 @@ import math
 
 # return number of lines of file
 def fileLen(_fileName):
+    i = -1
     with open(_fileName) as f:
         for i, l in enumerate(f):
             pass
@@ -129,7 +130,7 @@ for el in scheduleData["sessions"] :
     el["numberPrintsMax"] = numberPrintsMax
 
     # debug
-    print("{}date #{}\t\t{}\t{}\t=> {} minutes\t => {} prints on average. Maximum {} prints.".format(baseDebug, incr, datetime_start, datetime_end, datetime_diff, numberPrintsAvg, numberPrintsMax))
+    print("{}session #{}\t\t{}\t{}\t=> {} minutes\t => {} prints on average. Maximum {} prints.".format(baseDebug, incr, datetime_start, datetime_end, datetime_diff, numberPrintsAvg, numberPrintsMax))
 
     #
     incr = incr + 1
@@ -233,7 +234,7 @@ for el in scheduleData["sessions"] :
         tweet["created_at_hour_readable"] = tweetCreatedAt_hourReadable
 
         # set date index and tweet index
-        tweet["sessionIndex"] = str(incrSess).zfill(2)
+        tweet["sessionIndex"] = el["session_index"]
         tweet["printIndex"] = str(i)
         tweet["printIndexPadded"] = str(i).zfill(3)
 
