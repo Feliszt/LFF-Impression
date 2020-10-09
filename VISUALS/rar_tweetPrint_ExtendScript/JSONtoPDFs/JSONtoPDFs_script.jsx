@@ -5,7 +5,7 @@ var TWEET2INFO = 10.0;
 var INTERINFO =  5.0;
 var FONTMIN = 12;
 var FONTMAX = 80;
-var EVENTNAME = "pilote";
+var EVENTNAME = "videoPDF";
 
 /*
  -- load and read JSON
@@ -145,6 +145,7 @@ for(var i = 0; i < tweets.length; i+= 1) {
     var filename = tweets[i]["printIndexPadded"] + "_" + tweets[i]["id_str"];
     var filePath = savedPDFFolder + tweets[i]["printed_at_date_saving"] + "/";
     
+    /*
     // save normal pdf
     app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + ".pdf"), false, myPDFExportPreset);
     
@@ -163,11 +164,12 @@ for(var i = 0; i < tweets.length; i+= 1) {
     spreadItemsGroup.rotationAngle  = 180;
     
     // save flipped pdf
-    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
+    //app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
     
     // unflip element and ungroup
     spreadItemsGroup.rotationAngle  = 0;
     spreadItemsGroup.ungroup();
+    */
 
     // hide certain elements to create a PDF that will be used in video
     impression_nb_in_session.visible = false;

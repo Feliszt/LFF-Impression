@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tweet display in electron.</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <!--<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />-->
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="titleWrapper">
+      <h1>TWEET PICKER</h1>
+    </div>
+    <div class = "main">
+      <div id = "allWrapper">
+        <div id = "info">
+          <div id="eventWrapper">
+            <div id = "eventName"></div>
+          </div>
+          <div id="countWrapper">
+            <div id = "countInLog"></div>
+          </div>
+        </div>
+        <div id="tweet-wrapper">
+          <div id="tweet">
+            <a href = "" id = "tweet-link">
+              <div id = "tweet-subLink">
+                <div id="tweet-text">Voici un tweet.</div>
+                <div id="tweet-date">2020-08-08 15:00:00</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id = "buttons">
+      <a id = "choose-button" href = "javascript:saveTweet();" class="tweet-buttons">SAVE</a>
+      <a id = "discard-button" href = "javascript:discardTweet();" class="tweet-buttons">DISCARD</a>
+    </div>
+  </body>
+  <script src="tweetPicker.js"></script>
+</html>

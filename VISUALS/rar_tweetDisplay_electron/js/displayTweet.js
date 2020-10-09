@@ -134,7 +134,7 @@ function makeUL(array) {
 }
 
 // get list of files
-var eventName = "pilote";
+var eventName = "videoPDF";
 var tweetFolder = "./../../DATA/fromChecker/";
 var eventsFolder = "./../../DATA/events/";
 eventLogFile = eventsFolder + eventName + "/" + eventName + "_tweetsLog.txt";

@@ -5,9 +5,9 @@ PYTHON/tweetStreamer/keys.py
 PYTHON/automaticTweetStreamer/keys.py
 
 #directories
-VISUALS/rar_tweetDisplay_electron/bower_components
-VISUALS/rar_tweetDisplay_electron/node_modules
-VISUALS/rar_tweetDisplay_electron/dist
+VISUALS/*/bower_components
+VISUALS/*/node_modules
+VISUALS/*/dist
 #
 VISUALS/rar_tweetDisplay/bin
 VISUALS/rar_tweetDisplay/obj
