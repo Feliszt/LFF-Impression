@@ -33,7 +33,6 @@ VISUALS/rar_tweetPrint_electron/dist
 *.vcx*
 *.sln
 *.rc
-*.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

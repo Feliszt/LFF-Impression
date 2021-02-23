@@ -90,7 +90,7 @@ function loadFileNames (_folder) {
 };
 
 // get list of files
-var eventName = "OE2020";
+var eventName = "test";
 var eventTweetNum = 540;
 var tweetFolder = "./../../DATA/fromChecker/";
 var eventsFolder = "./../../DATA/events/";

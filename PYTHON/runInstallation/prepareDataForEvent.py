@@ -65,10 +65,10 @@ if(not os.path.isdir(eventFolder)) :
 print("{}Working with event [{}]".format(baseDebug, eventName))
 
 # set files
-logFile         = eventFolder + eventName + "_tweetsLog.txt"
 scheduleFile    = eventFolder + eventName + "_schedule.json"
-tweetsFinalFile = eventFolder + eventName + "_tweetsFinal.json"
-printLogFile    = eventFolder + eventName + "_printlog.txt"
+logFile         = eventFolder + eventName + "_toPrint.txt"
+tweetsFinalFile = eventFolder + eventName + "_toPrint_detailed.json"
+printLogFile    = eventFolder + eventName + "_printed.txt"
 
 # create and reset printLog file
 with open(printLogFile, "w") as f:

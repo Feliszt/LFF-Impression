@@ -1,11 +1,14 @@
 ﻿#include "../lib/json2.js"
 
 //  set variables
-var TWEET2INFO = 10.0;
-var INTERINFO =  5.0;
-var FONTMIN = 12;
-var FONTMAX = 80;
-var EVENTNAME = "videoPDF";
+var TWEET2INFO          = 10.0;
+var INTERINFO             =  5.0;
+var FONTMIN               = 12;
+var FONTMAX              = 70;
+var EVENTNAME           = "OE2020";
+var PRINT_NORMAL      = true;
+var PRINT_FLIPPED       = true;
+var PRINT_BARE           = false;
 
 /*
  -- load and read JSON
@@ -65,11 +68,11 @@ for (var i = 0; i < spreadItems.length; i += 1) {
   if (si.itemLayer.locked) continue;
   
   // get elements
-  if(si.name === "tweet_text")                             tweet_text = si;
+  if(si.name === "tweet_text")                              tweet_text = si;
   if(si.name === "tweet_date")                            tweet_date= si;
   if(si.name === "tweet_hour")                            tweet_hour = si;
-  if(si.name === "id")                                          tweet_id = si;
-  if(si.name === "impression_nb_in_session")       impression_nb_in_session = si;
+  if(si.name === "tweet_id")                                tweet_id = si;
+  if(si.name === "impression_nb_in_session")          impression_nb_in_session = si;
   if(si.name === "session_nb")                             session_nb = si;
   if(si.name === "impression_date")                     impression_date = si;
   if(si.name === "page_size")                              page_size = si;
@@ -83,6 +86,10 @@ var page_sz = [temp[3] - temp[1], temp[2] - temp[0]];
 $.writeln("Page size : [" + page_sz[0] + ", " + page_sz[1] + "]");
 
 for(var i = 0; i < tweets.length; i+= 1) {
+    //
+    var index = parseInt(tweets[i]["printIndex"], 10);
+    //if(tweets[i]["printed_at_date_saving"] !== "10-10-2020") continue;
+    
     // log
     $.writeln("Processing [" + tweets[i]["id_str"] + "]");
     
@@ -101,8 +108,7 @@ for(var i = 0; i < tweets.length; i+= 1) {
     tweet_id.contents = tweets[i]["id_str"];
     impression_nb_in_session.contents = tweets[i]["printIndexPadded"];
     session_nb.contents = tweets[i]["sessionIndex"];
-    impression_date.contents = tweets[i]["printed_at_date_readable"];
-    
+    impression_date.contents = tweets[i]["printed_at_date_readable"];    
     
     // create group
     var itemsToDistribute = [];
@@ -145,45 +151,52 @@ for(var i = 0; i < tweets.length; i+= 1) {
     var filename = tweets[i]["printIndexPadded"] + "_" + tweets[i]["id_str"];
     var filePath = savedPDFFolder + tweets[i]["printed_at_date_saving"] + "/";
     
-    /*
+  
     // save normal pdf
-    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + ".pdf"), false, myPDFExportPreset);
+    if(PRINT_NORMAL) {
+        app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + ".pdf"), false, myPDFExportPreset);
+    }
     
-    // group content
-    var spreadItemsArray = []
-    spreadItemsArray.push(tweet_text);
-    spreadItemsArray.push(tweet_date);
-    spreadItemsArray.push(tweet_hour);
-    spreadItemsArray.push(tweet_id);
-    spreadItemsArray.push(impression_nb_in_session);
-    spreadItemsArray.push(session_nb);
-    spreadItemsArray.push(impression_date);
-    var spreadItemsGroup = curSpread.groups.add(spreadItemsArray);
+    if(PRINT_FLIPPED) {
+        // group content
+        var spreadItemsArray = []
+        spreadItemsArray.push(tweet_text);
+        spreadItemsArray.push(tweet_date);
+        spreadItemsArray.push(tweet_hour);
+        spreadItemsArray.push(tweet_id);
+        spreadItemsArray.push(impression_nb_in_session);
+        spreadItemsArray.push(session_nb);
+        spreadItemsArray.push(impression_date);
+        var spreadItemsGroup = curSpread.groups.add(spreadItemsArray);
+        
+        // flip element
+        spreadItemsGroup.rotationAngle  = 180;
+        
+        // save flipped pdf
+        app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
+        
+        // unflip element and ungroup
+        spreadItemsGroup.rotationAngle  = 0;
+        spreadItemsGroup.ungroup();
     
-    // flip element
-    spreadItemsGroup.rotationAngle  = 180;
+    }
     
-    // save flipped pdf
-    //app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
-    
-    // unflip element and ungroup
-    spreadItemsGroup.rotationAngle  = 0;
-    spreadItemsGroup.ungroup();
-    */
-
-    // hide certain elements to create a PDF that will be used in video
-    impression_nb_in_session.visible = false;
-    session_nb.visible = false;
-    impression_date.visible = false;
-    
-    // print
-    app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_bare.pdf"), false, myPDFExportPreset);
-    
-    // unhide certain elements to create a PDF that will be used in video
-    impression_nb_in_session.visible = true;
-    session_nb.visible = true;
-    impression_date.visible = true;
+    if(PRINT_BARE) {
+        // hide certain elements to create a PDF that will be used in video
+        impression_nb_in_session.visible = false;
+        session_nb.visible = false;
+        impression_date.visible = false;
+        
+        // print
+        app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_bare.pdf"), false, myPDFExportPreset);
+        
+        // unhide certain elements to create a PDF that will be used in video
+        impression_nb_in_session.visible = true;
+        session_nb.visible = true;
+        impression_date.visible = true;
+    }
     
     // debug
     $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
+    //$.sleep(1000);
 }
