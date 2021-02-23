@@ -1,5 +1,4 @@
 import tweepy
-from keys import *
 import json
 import time
 import datetime
@@ -8,7 +7,6 @@ import random
 import threading
 
 def analyze_tweet(status, verbose) :
-
     # get time of creation
     createdAt = status.created_at
     createdAtTimestamp = datetime.datetime.timestamp(createdAt) + 7200  # correct for timezone
@@ -121,18 +119,6 @@ class MyStreamListener(tweepy.StreamListener):
 
         # get date
         dateTime = datetime.datetime.now().strftime("%d-%m-%Y")
-
-        # get hour
-        h = int(datetime.datetime.now().strftime("%H"))
-        hMapped = 0
-        if(h >= 0 and h < 6):
-            hMapped = 1
-        if(h >= 6 and h < 12):
-            hMapped = 2
-        if(h >= 12 and h < 18):
-            hMapped = 3
-        if(h >= 18 and h < 24):
-            hMapped = 4
 
         #self.jsonName = dateTime + "_" + str(hMapped)
         self.jsonName = dateTime
