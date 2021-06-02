@@ -50,7 +50,7 @@ if(len(sys.argv) != 2) :
 
 # set up file and folders
 eventsFolder = "../../DATA/events/"
-fromChecker = "../../DATA/fromChecker/"
+fromChecker = "../../DATA/tweetsChecked/"
 
 # get event
 eventName = sys.argv[1]
@@ -158,7 +158,7 @@ with open(logFile, "r", encoding="utf8") as f:
     for line in lines:
         # clean line
         line = line.strip('\n')
-        elements = line.split(' ')
+        elements = line.split('\t')
 
         if(len(elements) != 2) :
             print("ERROR WITH LINE [{}]".format(line))

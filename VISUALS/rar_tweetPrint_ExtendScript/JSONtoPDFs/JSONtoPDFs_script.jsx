@@ -1,14 +1,16 @@
 ﻿#include "../lib/json2.js"
 
+$.writeln("Starts script.");
+
 //  set variables
 var TWEET2INFO          = 10.0;
 var INTERINFO             =  5.0;
-var FONTMIN               = 12;
-var FONTMAX              = 70;
+var FONTMIN               = 11;
+var FONTMAX              = 60;
 var EVENTNAME           = "OE2020";
-var PRINT_NORMAL      = true;
-var PRINT_FLIPPED       = true;
-var PRINT_BARE           = false;
+var PRINT_NORMAL      = false;
+var PRINT_FLIPPED       = false;
+var PRINT_BARE           = true;
 
 /*
  -- load and read JSON
@@ -48,7 +50,7 @@ var myPDFExportPreset = app.pdfExportPresets.item("RAR_PDF_PRESET");
 var eventsFolder         = "D:/PERSO/_CREA/rar/_DEV/DATA/events/";
 var eventFolder         = eventsFolder + EVENTNAME + "/";
 var savedPDFFolder   = eventFolder + "pdfs/";
-var fileTweetsFinal     = eventFolder + EVENTNAME + "_tweetsFinal.json";
+var fileTweetsFinal     = eventFolder + EVENTNAME + "_toPrint_detailed.json";
 
 // load json
 tweets =  readJSON (File(fileTweetsFinal));
@@ -59,6 +61,7 @@ var tweet_date;
 var tweet_hour;
 var tweet_id;
 var page_size;
+
 
 // collect all relevant objects in distObjects
 for (var i = 0; i < spreadItems.length; i += 1) {
@@ -200,3 +203,4 @@ for(var i = 0; i < tweets.length; i+= 1) {
     $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
     //$.sleep(1000);
 }
+

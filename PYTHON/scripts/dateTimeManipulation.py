@@ -1,6 +1,13 @@
 import datetime
+import pytz
+from dateutil.parser import parse
+from dateutil.tz import tzoffset
+from dateutil.tz import UTC
+import time
 
-now = datetime.datetime.now()
-dt_string = now.strftime("%d-%m-%Y_%Hh%M")
+time_str = "Tue Mar 23 15:23:27 +0000 2021"
 
-print(dt_string)
+dt = parse(time_str)
+dt.astimezone(UTC)
+
+print(-time.timezone)

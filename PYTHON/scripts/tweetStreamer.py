@@ -9,13 +9,9 @@ import threading
 #override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
 
-    # init object
     def __init__(self):
         super(MyStreamListener, self).__init__()
-        self.resetVariables()
 
-    # reset everything
-    def resetVariables(self) :
         # get date
         dateTime = datetime.datetime.now().strftime("%d-%m-%Y")
 
@@ -47,9 +43,9 @@ class MyStreamListener(tweepy.StreamListener):
         if(isinstance(res, dict)) :
             self.numTweetsSaved = self.numTweetsSaved + 1
             print("[TWEETSTREAMER]\tTweet received [{}]\tSaving tweet [{}]\tthreads : {}\tDiffTime = {}".format(self.numTweetsAll, self.numTweetsSaved, threading.active_count(), diffTime))
-            with open(folderToSave + self.jsonName + '.json', 'a') as outfile:
-                json.dump(res, outfile)
-                outfile.write('\n')
+            #with open(folderToSave + self.jsonName + '.json', 'a') as outfile:
+            #    json.dump(res, outfile)
+            #    outfile.write('\n')
         else :
             if self.verbose :
                 if res == -1 :
@@ -69,7 +65,7 @@ class MyStreamListener(tweepy.StreamListener):
     def analyze_tweet(self, status, verbose) :
         # get time of creation
         createdAt = status.created_at
-        createdAtTimestamp = datetime.datetime.timestamp(createdAt) - time.timezone  # correct for timezone
+        createdAtTimestamp = datetime.datetime.timestamp(createdAt) + 7200  # correct for timezone
         createdAt = datetime.datetime.fromtimestamp(createdAtTimestamp)
 
         # get current time
@@ -179,8 +175,6 @@ keyFile = folderData + "keys.json"
 configFile = folderData + "config.json"
 
 # get config
-with open(configFile, 'r') as f_config :
-    config = json.load(f_config)
 
 # get keys and tokens
 with open(keyFile, 'r') as f_keys :
@@ -195,37 +189,10 @@ auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-# stream variable
+# create stream listener
 myStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener, tweet_mode= 'extended')
-stream_connected = False
-timeStart = 0
-waitTime = 0.1
 
-while True :
-    # get time
-    timeCurrent = time.time()
-
-    # launch stream
-    if not stream_connected :
-        print("[TWEETSTREAMER @ {}]\tConnect stream".format(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S")))
-        myStreamListener.resetVariables()
-        myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"], is_async=True)
-        stream_connected = True
-        timeStart = timeCurrent
-        waitTime = 0.1
-
-    # disconnect stream depending on 3 conditions
-    # 1- we reached the time limit
-    # 2- we received more than a specified number of tweets
-    # 3- we stored more than a specified number of tweets
-    if myStreamListener.numTweetsAll >= config["tweetStreamerMaxReceived"] or myStreamListener.numTweetsSaved >= config["tweetStreamerMaxStored"] or abs(timeCurrent - timeStart) >= config["tweetStreamerDurationMax"]:
-        myStream.disconnect()
-        stream_connected = False
-        waitTime = config["tweetStreamerWait"]
-
-        # info
-        print("[TWEETSTREAMER @ {}]\tDisconnect stream and wait {} seconds".format(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"), waitTime))
-
-    #
-    time.sleep(waitTime)
+# launch stream
+#myStream.filter(languages=["fr"], track=["non"])
+myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"])

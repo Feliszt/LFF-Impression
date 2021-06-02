@@ -16,11 +16,11 @@ function getRandomTweet(_fileNames) {
   currTweet =  tweetDATA[Math.floor(Math.random() * tweetDATA.length)];
 
   //
-  foundAnUnsavedTweet = unsavableTweets.includes(currTweet["id_str"]);
+  foundAnUnsavableTweet = unsavableTweets.includes(currTweet["id_str"]);
 
   // check if tweet is in unsavable list
   var tweetEl = document.getElementById("tweet");
-  if(foundAnUnsavedTweet) {
+  if(foundAnUnsavableTweet) {
      tweetEl.style.backgroundColor = "rgba(186, 86, 43, 0.5)";
    } else {
      tweetEl.style.backgroundColor = "rgba(255, 255, 255, 1.0)";
@@ -60,7 +60,7 @@ async function saveTweet() {
   unsavableTweets.push(currTweet["id_str"]);
 
   // save to stream
-  var dataToAppend = currFile + " " + currTweet["id_str"] + "\n";
+  var dataToAppend = currFile + "\t" + currTweet["id_str"] + "\n";
 
   //
   fs.appendFileSync(eventLogFile, dataToAppend);
@@ -90,11 +90,11 @@ function loadFileNames (_folder) {
 };
 
 // get list of files
-var eventName = "test";
+var eventName = "DNA2021";
 var eventTweetNum = 540;
-var tweetFolder = "./../../DATA/fromChecker/";
+var tweetFolder = "./../../DATA/tweetsChecked/";
 var eventsFolder = "./../../DATA/events/";
-eventLogFile = eventsFolder + eventName + "/" + eventName + "_tweetsLog.txt";
+eventLogFile = eventsFolder + eventName + "/" + eventName + "_toPrint.txt";
 
 // set logged tweets variables
 var unsavableTweets = [];
@@ -103,25 +103,49 @@ var savedTweetsCount = 0;
 //
 currTweet = "";
 
+// fetch all events in event folder
+var events = fs.readdirSync(eventsFolder)
+var i;
+for (i = 0; i < events.length; i++) {
+  var ev = events[i];
+
+  // discard gitkeep and current event
+  if(ev == ".gitkeep") {
+    continue;
+  }
+
+  // for current event, we check the _toPrint.txt file
+  var fileToAnalyse = "_printed.txt";
+  var fileNameFull = eventsFolder + events[i] + "/" + events[i] + fileToAnalyse;
+  if (ev == eventName) {
+    fileToAnalyse = "_toPrint.txt";
+    fileNameFull = eventsFolder + events[i] + "/" + events[i] + fileToAnalyse;
+
+    const readInterface = readline.createInterface({input: fs.createReadStream(fileNameFull), output: process.stdout, console: false });
+    readInterface.on('line', function(line) {
+        savedTweetsCount++;
+        unsavableTweets.push(line.split('\t')[1]);
+    });
+
+    readInterface.on('close', function() {
+      document.getElementById('countInLog').innerHTML = savedTweetsCount;
+      loadFirstTweet();
+    });
+
+    continue;
+  }
+
+  // read file
+  const readInterface = readline.createInterface({input: fs.createReadStream(fileNameFull), output: process.stdout, console: false });
+  readInterface.on('line', function(line) {
+      unsavableTweets.push(line.split('\t')[1]);
+  });
+}
+
+console.log(unsavableTweets)
+
 // create append stream
 var stream = fs.createWriteStream(eventLogFile, {flags:'a'});
 
 // set event name
 document.getElementById('eventName').innerHTML = eventName;
-
-//
-const readInterface = readline.createInterface({
-    input: fs.createReadStream(eventLogFile),
-    output: process.stdout,
-    console: false
-});
-
-readInterface.on('line', function(line) {
-    savedTweetsCount++;
-    unsavableTweets.push(line.split(' ')[1]);
-});
-
-readInterface.on('close', function() {
-  document.getElementById('countInLog').innerHTML = savedTweetsCount;
-  loadFirstTweet();
-});
