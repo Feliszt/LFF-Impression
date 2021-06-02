@@ -173,8 +173,8 @@ class MyStreamListener(tweepy.StreamListener):
 
 
 # folder to save in
-folderData = "../../DATA/"
-folderToSave = folderData + "tweetsUnchecked/toclean/"
+folderData = "../DATA/"
+folderToSave = folderData + "tweetsUnchecked/"
 keyFile = folderData + "keys.json"
 configFile = folderData + "config.json"
 
@@ -210,7 +210,7 @@ while True :
     if not stream_connected :
         print("[TWEETSTREAMER @ {}]\tConnect stream".format(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S")))
         myStreamListener.resetVariables()
-        myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et"], is_async=True)
+        myStream.filter(languages=["fr"], track=["je", "le", "la", "les", "tu", "es", "suis", "a", "as", "es", "oui", "non", "y", "et", "pas"], is_async=True)
         stream_connected = True
         timeStart = timeCurrent
         waitTime = 0.1

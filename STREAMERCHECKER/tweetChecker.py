@@ -7,7 +7,6 @@
 import tweepy
 import os
 import requests
-from keys import *
 import json
 import time
 import datetime
@@ -42,28 +41,41 @@ def processTweet(_tweet) :
 
     return 1, _tweet
 
+# set folders
+folderData = "../DATA/"
+uncheckedTweetsFolder = folderData + "tweetsUnchecked/"
+checkedTweetsFolder = folderData + "tweetsChecked/"
+imageFolder = folderData + "images/"
+keyFile = folderData + "keys.json"
+configFile = folderData + "config.json"
+
+# get config
+with open(configFile, 'r') as f_config :
+    config = json.load(f_config)
+
+# get keys and tokens
+with open(keyFile, 'r') as f_keys :
+    data = json.load(f_keys)
+    api_key = data["api_key"]
+    api_secret_key = data["api_secret_key"]
+    access_token = data["access_token"]
+    access_token_secret = data["access_token_secret"]
+
 # authentification and creation of api object
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-# set folders
-streamerFolder = "../../DATA/fromStreamer/"
-checkerFolder = "../../DATA/fromChecker/"
-checkerFolder_toclean = "../../DATA/fromChecker/toclean/"
-imageFolder = "../../DATA/images/"
-
 # get files
-filesFromStreamer = [f for f in os.listdir(streamerFolder) if os.path.isfile(os.path.join(streamerFolder, f))]
-filesFromChecker = [f for f in os.listdir(checkerFolder) if os.path.isfile(os.path.join(checkerFolder, f))]
-filesFromChecker_toclean = [f for f in os.listdir(checkerFolder_toclean) if os.path.isfile(os.path.join(checkerFolder_toclean, f))]
+filesFromStreamer = [f for f in os.listdir(uncheckedTweetsFolder) if os.path.isfile(os.path.join(uncheckedTweetsFolder, f)) and f != ".gitkeep"]
+filesFromChecker = [f for f in os.listdir(checkedTweetsFolder) if os.path.isfile(os.path.join(checkedTweetsFolder, f)) and f != ".gitkeep"]
 
 # get today's date
 today = datetime.datetime.now()
 #today = today.strftime("%d-%m-%Y")
 
 # filter out files that are less than 2 weeks old and files that have already been checked
-filesToProcess = [f for f in filesFromStreamer if datetime.datetime.strptime(f.split('.')[0], "%d-%m-%Y") < today - datetime.timedelta(days=15) and f.split('.')[0] + "_checked.json" not in filesFromChecker_toclean]
+filesToProcess = [f for f in filesFromStreamer if datetime.datetime.strptime(f.split('.')[0], "%d-%m-%Y") < today - datetime.timedelta(days=config["checkOffset"]) and f.split('.')[0] + "_checked.json" not in filesFromChecker]
 
 # log
 print("[tweetChecker] Processing {} files.".format(len(filesToProcess)))
@@ -81,12 +93,12 @@ for file in filesToProcess :
     fileIter = fileIter + 1
 
     # print info
-    print("Processing [{}].".format(fileToPrint))
+    print("Processing [{}]".format(fileToPrint))
 
     #
-    with open(streamerFolder + file) as dataFile:
+    with open(uncheckedTweetsFolder + file, 'r') as dataFile:
         # get data
-        data = json.load(dataFile)["tweets"]
+        data = dataFile.readlines()
 
         #
         tweetTotal = len(data)
@@ -94,11 +106,12 @@ for file in filesToProcess :
 
         # loop through all tweets
         tweetNum = 0
-        for tweet in data :
+        for tweet_line in data :
             # we start by waiting to not overflow the API
-            time.sleep(1.01)
+            time.sleep(2)
 
             # incr
+            tweet = json.loads(tweet_line)
             tweetNum = tweetNum + 1
 
             # print info
@@ -165,7 +178,7 @@ for file in filesToProcess :
 
 
             # write to file
-            with open(checkerFolder_toclean + fileToPrint + '_checked.json', 'a') as outfile:
+            with open(checkedTweetsFolder + fileToPrint + '_checked.json', 'a') as outfile:
                 json.dump(tweet_checked, outfile)
                 outfile.write('\n')
 

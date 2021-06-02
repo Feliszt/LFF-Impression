@@ -1,0 +1,7 @@
+{
+  "tweetStreamerDurationMax": 30,
+  "tweetStreamerWait": 3600,
+  "tweetStreamerMaxReceived" : 700,
+  "tweetStreamerMaxStored" : 50,
+  "checkOffset" : 30
+}
