@@ -21,10 +21,13 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(255);
   
   // pick random picture
   int randInd = int(random(0, fileNames.length));
+  if (fileNames[randInd].equals(".gitkeep")) {
+   return;
+  }
   img = loadImage(fullImagePath + fileNames[randInd]);
   
   // get scale
@@ -53,7 +56,7 @@ void draw() {
   //println("img width = " + img.width + "\tnew width = " + new_w + "\timg height = " + img.height + "\tnew height = " + new_h);  
   
   // pick random delay
-  int timeDelay = int(random(0, 100));
+  int timeDelay = int(random(0, 10));
   delay(timeDelay);
 }
 
