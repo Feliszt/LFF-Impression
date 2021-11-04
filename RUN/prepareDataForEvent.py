@@ -4,6 +4,7 @@ import datetime
 import sys
 import random
 import math
+import shutil
 
 # return number of lines of file
 def fileLen(_fileName):
@@ -49,8 +50,8 @@ if(len(sys.argv) != 2) :
     quit()
 
 # set up file and folders
-eventsFolder = "../../DATA/events/"
-fromChecker = "../../DATA/tweetsChecked/"
+eventsFolder = "../DATA/events/"
+fromChecker = "../DATA/tweetsChecked/"
 
 # get event
 eventName = sys.argv[1]
@@ -58,7 +59,17 @@ eventFolder = eventsFolder + eventName + "/"
 
 # check if event exists
 if(not os.path.isdir(eventFolder)) :
-    print("{}Folder for event [{}] doesn't exist.".format(baseDebug, eventName))
+    print("{}Folder for event [{}] doesn't exist. Creating it and initializing it.".format(baseDebug, eventName))
+    os.mkdir(eventFolder)
+
+    # copy files from template
+    templateFolder = eventsFolder + "event-template/"
+    for file in os.listdir(templateFolder) :
+        if os.path.isdir(templateFolder + file):
+            os.mkdir(eventFolder + file)
+            shutil.copyfile(templateFolder + file + "/.gitkeep", eventFolder + file + "/.gitkeep")
+            continue
+        shutil.copyfile(eventsFolder + "event-template/" + file, eventFolder + file.replace("event-template", eventName))
     quit()
 
 # debug
