@@ -3,7 +3,7 @@ DATA/keys.json
 DATA/tweetsUnchecked/*.json
 DATA/tweetsChecked/*.json
 DATA/events/*
-!DATA/events/event_template/
+!DATA/events/event-template/
 
 #directories
 VISUALS/*/bower_components

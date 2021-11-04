@@ -1,0 +1,12 @@
+{
+  "printFreqMin" : xxx,
+  "printFreqMax" : xxx,
+  "sessions" : [
+    {
+      "date"          : "xx/xx/xxxx",
+      "session_index" : "xx",
+      "timeStart"     : "xx:xx",
+      "timeEnd"       : "xx:xx"
+    }
+  ]
+}
