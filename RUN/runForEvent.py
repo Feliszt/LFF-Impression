@@ -6,7 +6,7 @@ import json
 import random
 
 # define base debug
-baseDebug = "[runRARForEvent]\t"
+baseDebug = "[runForEvent]\t"
 
 # check for inputs
 if(len(sys.argv) != 2 and len(sys.argv) != 3) :
@@ -19,12 +19,12 @@ if(len(sys.argv) == 3 and sys.argv[2] == "TESTPRINT") :
     testPrint = True
 
 # set testprintfile
-testPrintFolder = "../../DATA/others/"
+testPrintFolder = "../DATA/others/"
 testPrintFileName   = "testPrintFile.pdf"
 testPrintFile = testPrintFolder + testPrintFileName
 
 # set up folder
-eventsFolder = "../../DATA/events/"
+eventsFolder = "../DATA/events/"
 
 # get event
 eventName = sys.argv[1]
@@ -38,7 +38,7 @@ if(not os.path.isdir(eventFolder)) :
 # set files
 scheduleFile    = eventFolder + eventName + "_schedule.json"
 eventPDFFolder  = eventFolder + "pdfs/"
-printLogFile    = eventFolder + eventName + "_printlog.txt"
+printLogFile    = eventFolder + eventName + "_printed.txt"
 
 # check if event exists
 if(not os.path.isdir(eventPDFFolder)) :

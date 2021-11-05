@@ -7,10 +7,10 @@ var TWEET2INFO          = 10.0;
 var INTERINFO             =  5.0;
 var FONTMIN               = 11;
 var FONTMAX              = 60;
-var EVENTNAME           = "DNA2021";
-var PRINT_NORMAL      = false;
-var PRINT_FLIPPED       = false;
-var PRINT_BARE           = false;
+var EVENTNAME           = "test";
+var PRINT_NORMAL      = true;
+var PRINT_FLIPPED       = true;
+var PRINT_BARE           = true;
 
 /*
  -- load and read JSON
