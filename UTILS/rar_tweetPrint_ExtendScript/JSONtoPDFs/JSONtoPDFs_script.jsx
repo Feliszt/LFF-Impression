@@ -7,10 +7,10 @@ var TWEET2INFO          = 10.0;
 var INTERINFO             =  5.0;
 var FONTMIN               = 11;
 var FONTMAX              = 60;
-var EVENTNAME           = "OE2020";
+var EVENTNAME           = "DNA2021";
 var PRINT_NORMAL      = false;
 var PRINT_FLIPPED       = false;
-var PRINT_BARE           = true;
+var PRINT_BARE           = false;
 
 /*
  -- load and read JSON
@@ -44,10 +44,11 @@ var curSpread = doc.layoutWindows[0].activeSpread;
 var spreadItems = curSpread.allPageItems;
 
 // load pdf preset
-var myPDFExportPreset = app.pdfExportPresets.item("RAR_PDF_PRESET");
+// must create preset in InDesign before running this line
+var myPDFExportPreset = app.pdfExportPresets.item("LFF-Impression_Preset");
 
 // setup folders and files
-var eventsFolder         = "D:/PERSO/_CREA/rar/_DEV/DATA/events/";
+var eventsFolder         = "D:/PERSO/_CREA/LFF-Impression/_DEV/DATA/events/";
 var eventFolder         = eventsFolder + EVENTNAME + "/";
 var savedPDFFolder   = eventFolder + "pdfs/";
 var fileTweetsFinal     = eventFolder + EVENTNAME + "_toPrint_detailed.json";
@@ -61,6 +62,7 @@ var tweet_date;
 var tweet_hour;
 var tweet_id;
 var page_size;
+var all_group;
 
 
 // collect all relevant objects in distObjects
@@ -79,6 +81,7 @@ for (var i = 0; i < spreadItems.length; i += 1) {
   if(si.name === "session_nb")                             session_nb = si;
   if(si.name === "impression_date")                     impression_date = si;
   if(si.name === "page_size")                              page_size = si;
+  if(si.name === "all_group")                              all_group = si;
 };
 
 // get page size
@@ -161,8 +164,9 @@ for(var i = 0; i < tweets.length; i+= 1) {
     }
     
     if(PRINT_FLIPPED) {
-        // group content
-        var spreadItemsArray = []
+       // group content
+       /*
+         var spreadItemsArray = []
         spreadItemsArray.push(tweet_text);
         spreadItemsArray.push(tweet_date);
         spreadItemsArray.push(tweet_hour);
@@ -171,16 +175,19 @@ for(var i = 0; i < tweets.length; i+= 1) {
         spreadItemsArray.push(session_nb);
         spreadItemsArray.push(impression_date);
         var spreadItemsGroup = curSpread.groups.add(spreadItemsArray);
+        */
         
         // flip element
-        spreadItemsGroup.rotationAngle  = 180;
+        //spreadItemsGroup.rotationAngle  = 180;
+        all_group.rotationAngle  = 180;
         
         // save flipped pdf
         app.activeDocument.exportFile(ExportFormat.pdfType, File(filePath + filename + "_flipped.pdf"), false, myPDFExportPreset);
         
         // unflip element and ungroup
-        spreadItemsGroup.rotationAngle  = 0;
-        spreadItemsGroup.ungroup();
+        //spreadItemsGroup.rotationAngle  = 0;
+        all_group.rotationAngle  = 0;
+        //spreadItemsGroup.ungroup();
     
     }
     
@@ -200,7 +207,7 @@ for(var i = 0; i < tweets.length; i+= 1) {
     }
     
     // debug
-    $.writeln("Saving file at [" + filePath + "with name [" + filename + "]");
-    //$.sleep(1000);
+    $.writeln("Saving file at [" + filePath + "\twith name [" + filename + "]");
+    $.sleep(1000);
 }
 

@@ -11,7 +11,7 @@ function getRandomTweet(_fileNames) {
   // open file and load json
   var lines = fs.readFileSync(tweetFolder + currFile, 'utf-8').split('\n').filter(Boolean);
   var tweetJSON = lines[Math.floor(Math.random()*lines.length)];
-  var currTweet = JSON.parse(tweetJSON);
+  currTweet = JSON.parse(tweetJSON);
 
   //
   foundAnUnsavableTweet = unsavableTweets.includes(currTweet["id_str"]);
@@ -54,6 +54,8 @@ async function discardTweet() {
 
 // save current tweet
 async function saveTweet() {
+  console.log(currTweet);
+
   //
   unsavableTweets.push(currTweet["id_str"]);
 
@@ -88,8 +90,7 @@ function loadFileNames (_folder) {
 };
 
 // get list of files
-var eventName = "PLEIADES2021";
-var eventTweetNum = 540;
+var eventName = "test";
 var tweetFolder = "./../../DATA/tweetsChecked/";
 var eventsFolder = "./../../DATA/events/";
 eventLogFile = eventsFolder + eventName + "/" + eventName + "_toPrint.txt";

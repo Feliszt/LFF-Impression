@@ -18,12 +18,9 @@ def fileLen(_fileName):
 # function that searches for tweet with id in its file
 def searchTweet(_file, _id) :
     with open(_file, "r", encoding="utf8") as file :
-        # get data
-        data = json.load(file)["tweets"]
-
-        # loop through tweets and return when found
-        for tweet in data :
-            if(tweet["id_str"] == _id) :
+        for line in file.readlines() :
+            tweet = json.loads(line)
+            if (tweet["id_str"] == _id) :
                 return tweet
 
 # define base debug
@@ -51,7 +48,7 @@ if(len(sys.argv) != 2) :
 
 # set up file and folders
 eventsFolder = "../DATA/events/"
-fromChecker = "../DATA/tweetsChecked/"
+checkedFolder = "../DATA/tweetsChecked/"
 
 # get event
 eventName = sys.argv[1]
@@ -180,7 +177,7 @@ with open(logFile, "r", encoding="utf8") as f:
         tweetId = elements[1]
 
         # get tweet
-        tweet = searchTweet(fromChecker + tweetFile, tweetId)
+        tweet = searchTweet(checkedFolder + tweetFile, tweetId)
 
         # append tweet to list
         tweetList.append(tweet)

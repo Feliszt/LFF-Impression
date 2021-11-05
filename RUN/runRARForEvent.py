@@ -188,7 +188,7 @@ for pdf in PDFsToPrint:
 
     # write printlog
     with open(printLogFile, "a") as f:
-        f.write(nowDateHyphen + "\t" + PDFToPrintName + "\t" + now + "\n")
+        f.write(nowDateHyphen + "\t" + PDFToPrintName.split("_")[1] + "\t" + now + "\n")
 
     # wait
     timeToWait = random.uniform(printFreqMin, printFreqMax) * 60
