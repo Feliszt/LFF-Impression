@@ -90,7 +90,7 @@ function loadFileNames (_folder) {
 };
 
 // get list of files
-var eventName = "test";
+var eventName = "PLEIADES2021";
 var tweetFolder = "./../../DATA/tweetsChecked/";
 var eventsFolder = "./../../DATA/events/";
 eventLogFile = eventsFolder + eventName + "/" + eventName + "_toPrint.txt";

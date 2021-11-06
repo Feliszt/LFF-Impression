@@ -242,6 +242,7 @@ for el in scheduleData["sessions"] :
         tweet["created_at_hour_readable"] = tweetCreatedAt_hourReadable
 
         # set date index and tweet index
+        tweet["indexAll"] = incrTot
         tweet["sessionIndex"] = el["session_index"]
         tweet["printIndex"] = str(i)
         tweet["printIndexPadded"] = str(i).zfill(3)

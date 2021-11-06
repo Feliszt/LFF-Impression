@@ -6,8 +6,8 @@ $.writeln("Starts script.");
 var TWEET2INFO          = 10.0;
 var INTERINFO             =  5.0;
 var FONTMIN               = 11;
-var FONTMAX              = 60;
-var EVENTNAME           = "test";
+var FONTMAX              = 50;
+var EVENTNAME           = "PLEIADES2021";
 var PRINT_NORMAL      = true;
 var PRINT_FLIPPED       = true;
 var PRINT_BARE           = true;
@@ -90,14 +90,18 @@ var page_sz = [temp[3] - temp[1], temp[2] - temp[0]];
 
 // log
 $.writeln("Page size : [" + page_sz[0] + ", " + page_sz[1] + "]");
+var continueBool = true;
 
 for(var i = 0; i < tweets.length; i+= 1) {
     //
     var index = parseInt(tweets[i]["printIndex"], 10);
     //if(tweets[i]["printed_at_date_saving"] !== "10-10-2020") continue;
+    if (tweets[i]["indexAll"] <= 0) {
+        continue;
+     }
     
     // log
-    $.writeln("Processing [" + tweets[i]["id_str"] + "]");
+    $.writeln(i.toString() + "\tProcessing [" + tweets[i]["id_str"] + "]");
     
     // compute font size depending on text length
     var tweetSize = tweets[i]["text"].length;
@@ -208,6 +212,6 @@ for(var i = 0; i < tweets.length; i+= 1) {
     
     // debug
     $.writeln("Saving file at [" + filePath + "\twith name [" + filename + "]");
-    $.sleep(1000);
+    //$.sleep(1000);
 }
 

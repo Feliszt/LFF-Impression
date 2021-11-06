@@ -1,7 +1,9 @@
+# must install imagemagick and ghostscript for this to work
+
 import os
 
 # set folders
-folder_to_process = "../../DATA/events/DNA2021/pdfs/"
+folder_to_process = "../../DATA/events/PLEIADES2021/pdfs/"
 folder_to_populate = "../../DATA/pdfs_to_jpegs/"
 to_match = "bare"
 
@@ -10,6 +12,9 @@ folders = [f for f in os.listdir(folder_to_process)]
 
 # loop through folders
 for folder in folders :
+
+    if folder == ".gitkeep" :
+        continue
 
     # set folder name
     folder_full = folder_to_process + folder + "/"
